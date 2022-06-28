@@ -99,10 +99,10 @@ export default function PerformChart({ datagrafico }) {
           y="vendas"
         />
 
-        <VictoryLine
+        {/* <VictoryLine
           style={{ data: { stroke: "red", strokeWidth: 1 } }}
           data={datamet}
-        />
+        /> */}
 
       </VictoryChart>
 

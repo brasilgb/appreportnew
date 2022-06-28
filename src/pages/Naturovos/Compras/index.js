@@ -19,10 +19,11 @@ export default function LCompras() {
   return (
     <BoxHome>
       <HeaderPage
-        startColor="#014D9B"
-        endColor="#0A3B7E"
-        textColor="#FFF"
-        title="Lojas Solar"
+        startColor="#fcbc32"
+        endColor="#F5AB00"
+        textColor="#333"
+        bgStatus="#F5AB00"
+        title="Naturovos"
         subTitle="Compras"
         dtatu={moment(comTotais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
       />
@@ -39,11 +40,10 @@ export default function LCompras() {
         >
           <CompraTab.Screen name="Compar. Diário" component={CCompDiario} />
           <CompraTab.Screen name="Perform." component={CPerformance} />
-          <CompraTab.Screen name="Perform. Ass." component={CPerformanceAss} />
           <CompraTab.Screen name="Perform. Mês" component={CPerformanceMes} />
+          <CompraTab.Screen name="Perform. Tipo." component={CPerformanceAss} />
         </CompraTab.Navigator>
       </TabContainer>
-
     </BoxHome>
   );
 }

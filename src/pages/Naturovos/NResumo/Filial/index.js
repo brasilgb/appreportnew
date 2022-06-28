@@ -18,9 +18,8 @@ export default function Filial() {
                         <DataTable.Title style={styles.colgrande}>Filial.</DataTable.Title>
                         <DataTable.Title style={styles.colgrande}>Faturamento</DataTable.Title>
                         <DataTable.Title style={styles.colpequena}>Rep.Fat</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Proj.</DataTable.Title>
                         <DataTable.Title style={styles.colpequena}>Margem</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Meta</DataTable.Title>
+                        <DataTable.Title style={styles.colpequena}>Preço Médio</DataTable.Title>
                     </DataTable.Header>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {vtotal.map((tot, index) => (
@@ -28,9 +27,8 @@ export default function Filial() {
                                 <DataTable.Cell style={styles.colgrande}>Total</DataTable.Cell>
                                 <DataTable.Cell style={styles.colgrande}><MoneyPTBR number={parseFloat(tot.Faturamento)} /></DataTable.Cell>
                                 <DataTable.Cell style={styles.colpequena}>{((1) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((tot.Projecao) * 100).toFixed(2)}%</DataTable.Cell>
                                 <DataTable.Cell style={styles.colpequena}>{((tot.Margem) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((tot.MetaAlcancada) * 100).toFixed(2)}%</DataTable.Cell>
+                                <DataTable.Cell style={styles.colpequena}><MoneyPTBR number={parseFloat(tot.PrecoMedio)} /></DataTable.Cell>
                             </DataTable.Row>
                         ))}
                         {vfilial.map((fil, index) => (
@@ -38,9 +36,8 @@ export default function Filial() {
                                 <DataTable.Cell style={styles.colgrande}>{fil.Filial}</DataTable.Cell>
                                 <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={parseFloat(fil.Faturamento)} />}</DataTable.Cell>
                                 <DataTable.Cell style={styles.colpequena}>{((fil.RepFaturamento) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fil.Projecao) * 100).toFixed(2)}%</DataTable.Cell>
                                 <DataTable.Cell style={styles.colpequena}>{((fil.Margem) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fil.MetaAlcancada) * 100).toFixed(2)}%</DataTable.Cell>
+                                <DataTable.Cell style={styles.colpequena}>{<MoneyPTBR number={parseFloat(fil.PrecoMedio)} />}</DataTable.Cell>
                             </DataTable.Row>
                         ))}
                     </ScrollView>

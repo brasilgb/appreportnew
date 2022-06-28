@@ -1,41 +1,39 @@
 import React, { useContext, useRef, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { DataTable } from 'react-native-paper';
-import moment from 'moment';
-import MoneyPTBR from '../../../../components/MoneyPTBR';
-import { AuthContext } from '../../../../contexts/auth';
+import MoneyPTBR from '../../../../../components/MoneyPTBR';
+import { AuthContext } from '../../../../../contexts/auth';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
-import ResGrupo from './ResGrupo';
 import Icon from 'react-native-vector-icons/Ionicons';
+import ResAssoc from '../ResAssoc';
 
-export default function PerformanceAssociacao() {
+export default function ResGrupo({ setorName, nfatuPerfGrupo }) {
+
     const { width, height } = Dimensions.get('screen');
     const modalizeRef = useRef(null);
 
     const {
-        nfatuPerfSetor,
-        nfatuPerfGrupo,
-        nfatuTotais
+        nfatuPerfAssoc,
     } = useContext(AuthContext);
 
-    const [setorName, setSetorName] = useState('');
+    const [grupoName, setGrupoName] = useState('');
 
-    const openGrupo = () => {
+    const openAssoc = () => {
         modalizeRef.current?.open();
     };
 
-    const nameSetor = (setor) => {
-        setSetorName(setor);
+    const nameGrupo = (setor) => {
+        setGrupoName(setor);
     };
 
     return (
-        <View style={styles.container}>
 
+        <View style={styles.container}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <DataTable>
                     <DataTable.Header style={{ backgroundColor: '#E5E5EA' }}>
-                        <DataTable.Title style={styles.colgrande}>Setor</DataTable.Title>
+                        <DataTable.Title style={styles.colgrande}>Grupo</DataTable.Title>
                         <DataTable.Title style={styles.colgrande}>Faturamento</DataTable.Title>
                         <DataTable.Title style={styles.colpequena}>Margem</DataTable.Title>
                         <DataTable.Title style={styles.colpequena}>Rep. Total</DataTable.Title>
@@ -47,28 +45,16 @@ export default function PerformanceAssociacao() {
                     </DataTable.Header>
 
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        {nfatuTotais.map((fat, index) => (
-                            <DataTable.Row key={index} style={{ backgroundColor: '#E5E5EA' }}>
-                                <DataTable.Cell style={styles.colgrande}>TOTAL</DataTable.Cell>
-                                <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.PAssFaturamento) * 1)} />}</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fat.PAssMargem) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fat.PAssRepTotal) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>-</DataTable.Cell>
-                                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.PAssPrecoMedioKg) * 1)} />}</DataTable.Cell>
-                                <DataTable.Cell style={styles.colgrande}><MoneyPTBR number={((fat.PAssFaturamentoEC) * 1)} /></DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fat.PAssRepEC) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fat.PAssMargemEC) * 100).toFixed(2)}%</DataTable.Cell>
 
-                            </DataTable.Row>
-                        ))}
-                        {nfatuPerfSetor.sort((a, b) => (parseFloat(a.Faturamento) < parseFloat(b.Faturamento)) ? 1 : -1)
+                        {nfatuPerfGrupo.filter((filg) => (filg.Setor === setorName))
+                            .sort((a, b) => (parseFloat(a.Faturamento) < parseFloat(b.Faturamento)) ? 1 : -1)
                             .map((fat, index) => (
 
                                 <DataTable.Row key={index} style={{ backgroundColor: index % 2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>
                                     <DataTable.Cell style={styles.colgrande}>
-                                        <TouchableOpacity onPress={() => { openGrupo(); nameSetor(fat.Setor) }} style={styles.btnModal}>
+                                        <TouchableOpacity onPress={() => { openAssoc(); nameGrupo(fat.Grupo) }} style={styles.btnModal} >
                                             <Icon style={{ marginRight: 2, paddingTop: 3 }} name="ios-arrow-redo" size={14} color="#333" />
-                                            <Text style={{ color: '#333' }}>{fat.Setor}</Text>
+                                            <Text style={{ color: '#333' }}>{fat.Grupo}</Text>
                                         </TouchableOpacity>
                                     </DataTable.Cell>
                                     <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.Faturamento) * 1)} />}</DataTable.Cell>
@@ -87,14 +73,17 @@ export default function PerformanceAssociacao() {
                 </DataTable>
             </ScrollView>
 
+
+
             <Modalize
                 ref={modalizeRef}
-                snapPoint={height / 1.8}
-                modalHeight={height / 1.8}
+                snapPoint={height / 1.7}
+                modalHeight={height / 1.7}
             >
-                <ResGrupo setorName={setorName} nfatuPerfGrupo={nfatuPerfGrupo} nfatuTotais={nfatuTotais} />
-
+                <ResAssoc grupoName={grupoName} nfatuPerfAssoc={nfatuPerfAssoc} />
             </Modalize>
+
+
         </View>
 
     );
@@ -120,7 +109,6 @@ const styles = StyleSheet.create({
     colmin: {
         width: 50,
         paddingHorizontal: 2
-
     },
     btnModal: {
         width: 130,

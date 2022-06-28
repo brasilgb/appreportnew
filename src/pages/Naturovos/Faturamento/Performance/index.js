@@ -10,12 +10,22 @@ import NPerformChart from '../../../../components/Charts/NPerformChart';
 
 export default function Performance() {
 
-  const { nfatuGrafico } = useContext(AuthContext);
+  const { nfatuGrafico, nfatuTotais } = useContext(AuthContext);
   return (
     <View style={styles.container}>
 
       <ScrollView>
-        
+        <DataTable style={{ marginBottom: 10 }}>
+          <DataTable.Header style={styles.titleTable}>
+            <DataTable.Title><Text style={styles.titleText}>Média</Text></DataTable.Title>
+          </DataTable.Header>
+          {nfatuTotais.map((fatmes, index) => (
+            <DataTable.Row key={index}>
+              <DataTable.Cell>{<MoneyPTBR number={((fatmes.MediaDia) * 1)} />}</DataTable.Cell>
+            </DataTable.Row>
+          ))}
+        </DataTable>
+
         <NPerformChart datagrafico={nfatuGrafico} />
 
       </ScrollView>
@@ -52,6 +62,7 @@ const styles = StyleSheet.create({
   },
   titleTable: {
     backgroundColor: "#29ABE2",
+    color: "#FFF",
     borderTopLeftRadius: 6,
     borderTopRightRadius: 6
   },

@@ -11,7 +11,7 @@ import Svg, { Text } from 'react-native-svg';
 export default function Naturovos() {
 
   const { totais } = useContext(AuthContext);
-  const vtotal = totais.filter((dep) => (dep.Departamento === 1)).map(tot => tot);
+  const vtotal = totais.filter((dep) => (dep.Departamento === 2)).map(tot => tot);
 
   const colorValid = ((value) => {
     if (value <= 90) return "#DC2626";
@@ -58,40 +58,12 @@ export default function Naturovos() {
             </ContainerText>
           </AreaUm>
 
-          <AreaUm height="120px" paddingTop="-10px">
-            <Svg width={200} height={200}>
-              <VictoryPie
-                standalone={false}
-                animate={{ duration: 1000 }}
-                padAngle={0}
-                innerRadius={58}
-                width={200}
-                height={200}
-                data={[{ 'key': "", 'y': metaAlc }, { 'key': "", 'y': (100 - metaAlc) }]}
-                colorScale={[colorValid(metaAlc), "#ccc"]}
-                // cornerRadius={25}
-                labelComponent={<Text />}
-                labels={() => null}
-              />
-              <VictoryLabel
-                textAnchor="middle" verticalAnchor="middle"
-                x={100} y={120}
-                text="Alcançada"
-                style={{ fontSize: 14, fontFamily: "Roboto-Bold" }}
-              />
-              <VictoryAnimation duration={1000} delay={0} data={metaAlc}>
-                {(metaAlc) => {
-                  return (
-                    <VictoryLabel
-                      textAnchor="middle" verticalAnchor="middle"
-                      x={100} y={90}
-                      text={`${(parseFloat(metaAlc).toFixed())}%`}
-                      style={{ fontSize: 30, fontFamily: "Roboto-Bold" }}
-                    />
-                  );
-                }}
-              </VictoryAnimation>
-            </Svg>
+          <AreaUm height="120px" paddingTop="40px">
+            <ContainerText>
+              <ContainerText.Title color="#555" style={{ fontSize: 18 }}>Ticket Médio</ContainerText.Title>
+              <ContainerText.Value color="#555" style={{ fontSize: 40, fontWeight: 'bold' }}> <MoneyPTBR number={parseFloat(vtotal[0].TicketMedio)} /> </ContainerText.Value>
+            </ContainerText>
+
           </AreaUm>
           <AreaUm>
             <Svg width={200} height={200}>
@@ -183,7 +155,7 @@ export default function Naturovos() {
               textColor="#FFF"
               icon="ios-logo-usd"
               title="Faturamento"
-              onPress="LFaturamento"
+              onPress="SFaturamento"
             />
 
             <ButtomSetores
@@ -192,7 +164,7 @@ export default function Naturovos() {
               textColor="#FFF"
               icon="md-cart-outline"
               title="Compras"
-              onPress="LCompras"
+              onPress="SCompras"
             />
 
           </BoxButtom>

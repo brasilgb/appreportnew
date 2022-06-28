@@ -59,11 +59,11 @@ export default function Naturovos() {
           </AreaUm>
 
           <AreaUm height="120px" paddingTop="40px">
-          <ContainerText>
-              <ContainerText.Title color="#555" style={{ fontSize: 18}}>Preço Médio</ContainerText.Title>
-              <ContainerText.Value color="#555" style={{ fontSize: 40, fontWeight: 'bold'}}> <MoneyPTBR number={parseFloat(vtotal[0].PrecoMedio)} /> </ContainerText.Value>
+            <ContainerText>
+              <ContainerText.Title color="#555" style={{ fontSize: 18 }}>Preço Médio</ContainerText.Title>
+              <ContainerText.Value color="#555" style={{ fontSize: 40, fontWeight: 'bold' }}> <MoneyPTBR number={parseFloat(vtotal[0].PrecoMedio)} /> </ContainerText.Value>
             </ContainerText>
-          
+
           </AreaUm>
           <AreaUm>
             <Svg width={200} height={200}>
@@ -164,7 +164,7 @@ export default function Naturovos() {
               textColor="#333"
               icon="md-cart-outline"
               title="Compras"
-              onPress="LCompras"
+              onPress="NCompras"
             />
 
             <ButtomSetores
@@ -173,7 +173,7 @@ export default function Naturovos() {
               textColor="#333"
               icon="md-analytics"
               title="ADM Resumo"
-              onPress="LServicos"
+              onPress="NResumoFaturamento"
             />
 
           </BoxButtom>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import {
@@ -30,8 +30,7 @@ export default function PerformChart({ datagrafico }) {
     return (
       {
         x: gr.DiaSemana,
-        y: parseFloat(gr.Margem)
-      }
+        y: ((gr.Margem)*100).toFixed()     }
     );
   });
 
@@ -45,8 +44,8 @@ export default function PerformChart({ datagrafico }) {
           <Text style={styles.titleText}>Gráfico de evolução de Vendas</Text>
         </DataTable.Cell>
       </DataTable.Row>
-
-      {/* <VictoryChart
+       
+      <VictoryChart
         horizontal
         // height={750}
         // width={350}
@@ -54,9 +53,6 @@ export default function PerformChart({ datagrafico }) {
         domainPadding={{ x: [18, 18], y: 60 }}
         height={500}
       >
-
-        <VictoryGroup offset={20}>
-
 
         <VictoryLegend
           x={0} y={0}
@@ -106,49 +102,13 @@ export default function PerformChart({ datagrafico }) {
           y="vendas"
         />
 
-        <VictoryLine
+        {/* <VictoryLine
           style={{ data: { stroke: "red", strokeWidth: 1 } }}
           data={datamet}
-        />
+        /> */}
 
-
-        </VictoryGroup>
-
-      </VictoryChart> */}
-<VictoryChart horizontal  domain={{ y: [0, vendas] }}
-containerComponent={
-  <VictoryVoronoiContainer
-    voronoiDimension="x"
-    labels={({ data }) => `y: ${data.vendas}`}
-  />
-}
->
-    <VictoryGroup offset={10}>
-    <VictoryBar
-          data={data}
-          labels={({ datum }) => `R$ ${datum.vendas}`}
-          labelComponent={<VictoryLabel angle={0} textAnchor="start" verticalAnchor="middle" />}
-          barRatio={0.5}
-          alignment="middle"
-          animate={{
-            duration: 2000,
-            onLoad: { duration: 1000 }
-          }}
-          style={{
-            data: {
-              fill: "#009FE3",
-              // width: 5,
-            }
-          }}
-          x="diasemana"
-          y="vendas"
-        />
-        <VictoryLine
-            data={[{ x: 1, y: 100 }, { x: 2, y: 50 }, { x: 3, y: 50 }]}
-        />
-       
-    </VictoryGroup>
-</VictoryChart>
+      </VictoryChart>
+      
     </View>
   );
 }

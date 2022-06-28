@@ -4,14 +4,14 @@ import { BoxHome, TabContainer } from '../../style';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const ResumoTab = createMaterialTopTabNavigator();
 
-import Filial from './Filial';
+import Filiais from './Filial';
 import Segmento from './Segmento';
 import { AuthContext } from '../../../contexts/auth';
 import moment from 'moment';
 
 export default function ResumoSuper() {
   const { totais } = useContext(AuthContext);
-  const vtotal = totais.filter((dep) => (dep.Departamento === 1)).map(tot => tot);
+  const vtotal = totais.filter((dep) => (dep.Departamento === 2)).map(tot => tot);
   return (
     <BoxHome>
       <HeaderPage
@@ -33,7 +33,7 @@ export default function ResumoSuper() {
             tabBarPressColor: '#FF710F'
           }}
         >
-          <ResumoTab.Screen name="Filial" component={Filial} />
+          <ResumoTab.Screen name="Filial" component={Filiais} />
           <ResumoTab.Screen name="Segmento" component={Segmento} />
         </ResumoTab.Navigator>
       </TabContainer>

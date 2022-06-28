@@ -12,17 +12,18 @@ import CPerformanceAss from './PerformanceAss';
 import CPerformanceMes from './PerformanceMes';
 import { BoxHome, TabContainer } from '../../style';
 
-export default function LCompras() {
+export default function SCompras() {
 
   const { comTotais } = useContext(AuthContext);
 
   return (
     <BoxHome>
       <HeaderPage
-        startColor="#014D9B"
-        endColor="#0A3B7E"
+        startColor="#FF710F"
+        endColor="#f26000"
         textColor="#FFF"
-        title="Lojas Solar"
+        bgStatus="#f26000"
+        title="Supermercados"
         subTitle="Compras"
         dtatu={moment(comTotais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
       />

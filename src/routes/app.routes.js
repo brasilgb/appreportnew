@@ -16,12 +16,14 @@ import LCompras from '../pages/Lojas/Compras';
 import Naturovos from '../pages/Naturovos';
 import NResumo from '../pages/Naturovos/NResumo';
 import NFaturamento from '../pages/Naturovos/Faturamento';
-// import NServicos from '../pages/Naturovos/NServicos';
-// import NCompras from '../pages/Naturovos/NCompras';
+import NCompras from '../pages/Naturovos/Compras';
+import NResumoFaturamento from '../pages/Naturovos/ResumoFaturamento';
 
 // Roteamento Supermercados
 import Super from '../pages/Supermercados';
 import ResumoSuper from '../pages/Supermercados/ResumoSuper';
+import SCompras from '../pages/Supermercados/Compras';
+import SFaturamento from '../pages/Supermercados/Faturamento';
 
 
 export default function AppRoutes() {
@@ -64,8 +66,9 @@ export default function AppRoutes() {
         <NaturStack.Screen name="Naturovos" component={Naturovos} options={{ headerShown: false }} />
         <LojasStack.Screen name="NResumo" component={NResumo} options={{ headerShown: false }} />
         <LojasStack.Screen name="NFaturamento" component={NFaturamento} options={{ headerShown: false }} />
-        {/* <LojasStack.Screen name="NServicos" component={NServicos} options={{ headerShown: false }} />
-        <LojasStack.Screen name="NCompras" component={NCompras} options={{ headerShown: false }} /> */}
+        <LojasStack.Screen name="NCompras" component={NCompras} options={{ headerShown: false }} />
+        <LojasStack.Screen name="NResumoFaturamento" component={NResumoFaturamento} options={{ headerShown: false }} />
+        
       </NaturStack.Navigator>
     )
   }
@@ -75,6 +78,8 @@ export default function AppRoutes() {
       <SuperStack.Navigator>
         <SuperStack.Screen name="Super" component={Super} options={{ headerShown: false }} />
         <SuperStack.Screen name="ResumoSuper" component={ResumoSuper} options={{ headerShown: false }} />
+        <SuperStack.Screen name="SCompras" component={SCompras} options={{ headerShown: false }} />
+        <SuperStack.Screen name="SFaturamento" component={SFaturamento} options={{ headerShown: false }} />
       </SuperStack.Navigator>
     )
   }

@@ -57,7 +57,7 @@ export default function ResGrupo({ setorName, nfatuGrupo }) {
                     <ScrollView showsVerticalScrollIndicator={false}>
 
                         {nfatuGrupo.filter((filg) => (filg.Setor === setorName))
-                            .sort((a, b) => (parseFloat(a.FatuDia) < parseFloat(b.FatuDia)) ? 1 : -1)
+                            .sort((a, b) => (parseFloat(a.VendaMes) < parseFloat(b.VendaMes)) ? 1 : -1)
                             .map((fat, index) => (
 
                                 <DataTable.Row key={index} style={{ backgroundColor: index % 2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>

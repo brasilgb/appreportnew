@@ -3,16 +3,14 @@ import moment from 'moment';
 import HeaderPage from '../../../components/Header/Page';
 import { BoxHome, TabContainer } from '../../style';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Performance from './Performance';
-import PerformanceAssociacao from './PerformanceAssociacao/index.js';
-import PerformanceMes from './PerformanceMes';
-import ResumoDiario from './NResumo';
 const ResumoTab = createMaterialTopTabNavigator();
 
 import { AuthContext } from '../../../contexts/auth';
+import ResFaturamento from './ResFaturamento';
+import GrafEvolucao from './GrafEvolucao';
 
-export default function NFaturamento() {
-    const { nfatuTotais } = useContext(AuthContext);
+export default function NResumoFaturamento() {
+    const { nResTotal } = useContext(AuthContext);
 
     return (
         <BoxHome>
@@ -22,8 +20,8 @@ export default function NFaturamento() {
                 textColor="#333"
                 bgStatus="#F5AB00"
                 title="Naturovos"
-                subTitle="Faturamento"
-                dtatu={moment(nfatuTotais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+                subTitle="ADM Resumo"
+                dtatu={moment(nResTotal[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
             />
             <TabContainer>
                 <ResumoTab.Navigator
@@ -35,10 +33,8 @@ export default function NFaturamento() {
                         tabBarPressColor: '#fcbc32'
                     }}
                 >
-                    <ResumoTab.Screen name="Resumo Diario" component={ResumoDiario} />
-                    <ResumoTab.Screen name="Gráfico Perform." component={Performance} />
-                    <ResumoTab.Screen name="Perform. Assoc." component={PerformanceAssociacao} />
-                    <ResumoTab.Screen name="Perform. Mês" component={PerformanceMes} />
+                    <ResumoTab.Screen name="Resumo Faturamento" component={ResFaturamento} />
+                    <ResumoTab.Screen name="Gráfico Evolução" component={GrafEvolucao} />
                 </ResumoTab.Navigator>
             </TabContainer>
         </BoxHome>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import numbro from 'numbro';
 
 numbro.registerLanguage({

@@ -79,7 +79,7 @@ export default function ResumoDiario() {
 
                             </DataTable.Row>
                         ))}
-                        {nfatuSetor.sort((a, b) => (parseFloat(a.FatuDia) < parseFloat(b.FatuDia)) ? 1 : -1)
+                        {nfatuSetor.sort((a, b) => (parseFloat(a.VendaMes) < parseFloat(b.VendaMes)) ? 1 : -1)
                             .map((fat, index) => (
 
                                 <DataTable.Row key={index} style={{ backgroundColor: index % 2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>
