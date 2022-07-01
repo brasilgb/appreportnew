@@ -135,7 +135,7 @@ export default function AuthProvider({ children }) {
         }
         getTotais();
     }, [dataFiltro]);
-console.log(totais);
+//console.log(totais);
     // Extração de dados do faturamento
     useEffect(() => {
         async function getFatuLojas() {
@@ -268,6 +268,7 @@ console.log(totais);
             await api.get(`sertotais/${dtFormatada(dataFiltro)}`)
                 .then(stotais => {
                     setSerTotais(stotais.data);
+
                 })
                 .catch(err => {
                     console.log(err)
@@ -576,7 +577,7 @@ console.log(totais);
         getNResGrafico();
     }, [dataFiltro]);
 
-    // Compras Naturovos Resumo Associação *************************
+    // Compras Naturovos Resumo Grupo *************************
     useEffect(() => {
         async function getNResGrupo() {
             await api.get(`nresgrupo/${dtFormatada(dataFiltro)}`)
@@ -588,6 +589,20 @@ console.log(totais);
                 });
         }
         getNResGrupo();
+    }, [dataFiltro]);
+
+    // Compras Naturovos Resumo Associação *************************
+    useEffect(() => {
+        async function getNResAssoc() {
+            await api.get(`nresassoc/${dtFormatada(dataFiltro)}`)
+                .then(nrassoc => {
+                    setNResAssoc(nrassoc.data);
+                })
+                .catch(err => {
+                    console.log(err)
+                });
+        }
+        getNResAssoc();
     }, [dataFiltro]);
 
     /**

@@ -7,10 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment';
 
 export default function SCompDiario() {
-  const { serResumoDia, serTotais, totais } = useContext(AuthContext);
-  const reservicos = serResumoDia.map((fatu) => (fatu));
-  const dtatualizacao = serTotais.map((fatu) => (fatu.Atualizacao));
-  const diavenda = moment(dtatualizacao.toString()).format('D');
+  const { serResumoDia, serTotais, comTotais } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -19,8 +16,8 @@ export default function SCompDiario() {
         <DataTable>
           <DataTable.Header style={{backgroundColor: '#eee'}}>
             <DataTable.Title style={styles.colmedia}>Regional</DataTable.Title>
-            <DataTable.Title style={styles.colpequena}>GE Dia {totais[0].DataAtual}</DataTable.Title>
-            <DataTable.Title style={styles.colpequena}>PP dia  {diavenda}</DataTable.Title>
+            <DataTable.Title style={styles.colpequena}>GE Dia {comTotais[0].DiaAtual}</DataTable.Title>
+            <DataTable.Title style={styles.colpequena}>PP dia  {comTotais[0].DiaAtual}</DataTable.Title>
             <DataTable.Title style={styles.colpequena}>GE Sem.</DataTable.Title>
             <DataTable.Title style={styles.colpequena}>PP Sem.</DataTable.Title>
             <DataTable.Title style={styles.colpequena}>GE Mês</DataTable.Title>
@@ -52,7 +49,7 @@ export default function SCompDiario() {
                 <DataTable.Cell style={styles.colpequena}>{((tot.TotRep) * 100).toFixed(2)}%</DataTable.Cell>
               </DataTable.Row>
             ))}
-            {reservicos.map((fat, index) => (
+            {serResumoDia.map((fat, index) => (
               <DataTable.Row key={index}>
                 <DataTable.Cell style={styles.colmedia}>{fat.Supervisor}</DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>{<MoneyPTBR number={((fat.GEDia) * 1)} />}</DataTable.Cell>

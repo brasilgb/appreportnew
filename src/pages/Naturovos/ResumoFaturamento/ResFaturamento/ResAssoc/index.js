@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import MoneySemSimbolo from '../../../../../components/MoneyPTBR/MoneySemSimbolo';
 
 export default function nResAssoc({ grupoName, nResAssoc, nResTotal }) {
+
     return (
         <View style={styles.container}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
