@@ -11,7 +11,7 @@ export default function nResAssoc({ grupoName, nResAssoc, nResTotal }) {
         <View style={styles.container}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <DataTable>
-                {nResTotal.map((fat, index) => (
+                    {nResTotal.map((fat, index) => (
                         <DataTable.Header key={index} style={{ backgroundColor: '#E5E5EA' }}>
                             <DataTable.Title style={styles.colmedia}>Associação</DataTable.Title>
                             <DataTable.Title style={styles.colmedia}>{fat.RotValorMesAtual}</DataTable.Title>

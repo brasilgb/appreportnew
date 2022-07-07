@@ -7,7 +7,6 @@ import moment from 'moment';
 import Dia from './Dia';
 import GEDia from './GE';
 import PPDia from './PP';
-import PerformChart from '../../../../components/Charts/PerformChart';
 export default function SPerformanceDia() {
 
   const { serTotais, serGrafico } = useContext(AuthContext);
@@ -30,7 +29,7 @@ export default function SPerformanceDia() {
         <View>
           <PPDia data={sertotlojas} />
         </View>
-        <PerformChart datagrafico={serGrafico} />
+        {/* Gráfico */}
       </ScrollView>
     </View>
   );

@@ -7,8 +7,8 @@ background-color: #F1F1F1;
 
 export const ScreenArea = styled.View`
 flex: 4;
-
 `;
+
 export const GraphArea = styled.View`
 flex: 1;
 

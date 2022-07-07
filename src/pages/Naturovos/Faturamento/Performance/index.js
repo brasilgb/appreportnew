@@ -5,8 +5,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { DataTable } from 'react-native-paper';
 import { AuthContext } from '../../../../contexts/auth';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
-import moment from 'moment';
-import NPerformChart from '../../../../components/Charts/NPerformChart';
 
 export default function Performance() {
 
@@ -26,11 +24,9 @@ export default function Performance() {
           ))}
         </DataTable>
 
-        <NPerformChart datagrafico={nfatuGrafico} />
+        {/* // Gráfico */}
 
       </ScrollView>
-
-
 
     </View>
 

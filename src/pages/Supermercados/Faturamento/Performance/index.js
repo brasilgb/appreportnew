@@ -5,14 +5,11 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { DataTable } from 'react-native-paper';
 import { AuthContext } from '../../../../contexts/auth';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
-import moment from 'moment';
-import PerformChart from '../../../../components/Charts/PerformChart';
 
 export default function Performance() {
 
-  const { fatuTotLojas, fatuGrafLojas } = useContext(AuthContext);
-  const dtatualizacao = fatuTotLojas.map((fatu) => (fatu.Atualizacao));
-  const diavenda = moment(dtatualizacao.toString()).format('D');
+  const { fatuTotLojas, sFatTotais } = useContext(AuthContext);
+
   return (
     <View style={styles.container}>
 
@@ -31,24 +28,24 @@ export default function Performance() {
               <DataTable.Title style={styles.colpequena}>Atingido</DataTable.Title>
               <DataTable.Title style={styles.colpequena}>Perf.Atual</DataTable.Title>
             </DataTable.Header>
-            {fatuTotLojas.map((fatmes, index) => (
+            {sFatTotais.map((fatmes, index) => (
               <DataTable.Row key={index}>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatmes.MetaMes) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatmes.VendaMes) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatmes.PerfMesMeta) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatmes.PerfMesVenda) * 1)} />}</DataTable.Cell>
                 <DataTable.Cell style={styles.colmedia}>
                   <Text
-                    style={((fatmes.FaltaVenderMes) * 1) > 0 ? { color: 'green' } : { color: 'red' }}
+                    style={((fatmes.PerfMesFaltVender) * 1) > 0 ? { color: 'green' } : { color: 'red' }}
                   >
-                    {<MoneyPTBR number={((fatmes.FaltaVenderMes) * 1)} />}
+                    {<MoneyPTBR number={((fatmes.PerfMesFaltVender) * 1)} />}
                   </Text>
                 </DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((fatmes.MetaParcMes) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((fatmes.AtingidoMes) * 100).toFixed(2)}%</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{((fatmes.PerfMesMetaParcial) * 100).toFixed(2)}%</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{((fatmes.PerfMesAtingido) * 100).toFixed(2)}%</DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>
                   <Text
-                    style={((fatmes.PerfAtualMes) * 100).toFixed() > 100 ? { color: 'green' } : { color: 'red' }}
+                    style={((fatmes.PerfMesPerf) * 100).toFixed() > 100 ? { color: 'green' } : { color: 'red' }}
                   >
-                    {((fatmes.PerfAtualMes) * 100).toFixed(2)}%
+                    {((fatmes.PerfMesPerf) * 100).toFixed(2)}%
                   </Text>
                 </DataTable.Cell>
               </DataTable.Row>
@@ -57,53 +54,43 @@ export default function Performance() {
         </ScrollView>
 
         <DataTable.Row style={styles.titleTable}>
-          <DataTable.Cell style={styles.titleText}><Text style={styles.titleText}>Performance do Dia {diavenda}</Text></DataTable.Cell>
+          <DataTable.Cell style={styles.titleText}><Text style={styles.titleText}>Performance do Dia {fatuTotLojas[0].DiaAtual}</Text></DataTable.Cell>
         </DataTable.Row>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <DataTable style={{ marginBottom: 20 }}>
 
             <DataTable.Header style={{ backgroundColor: '#eee' }}>
-              <DataTable.Title style={styles.colmedia}>Meta</DataTable.Title>
-              <DataTable.Title style={styles.colmedia}>Venda</DataTable.Title>
+              <DataTable.Title style={styles.colmedia}>Meta Dia</DataTable.Title>
+              <DataTable.Title style={styles.colmedia}>Venda Dia</DataTable.Title>
               <DataTable.Title style={styles.colmedia}>Falta Vender</DataTable.Title>
-              <DataTable.Title style={styles.colpequena}>Perf.Meta Dia</DataTable.Title>
-              <DataTable.Title style={styles.colmedia}>Juros s/Parc.Dia</DataTable.Title>
-              <DataTable.Title style={styles.colmedia}>Perf.Jur.Dia</DataTable.Title>
+              <DataTable.Title style={styles.colpequena}>Perf. Dia</DataTable.Title>
               <DataTable.Title style={styles.colmedia}>Média Dia</DataTable.Title>
             </DataTable.Header>
-            {fatuTotLojas.map((fatdia, index) => (
+            {sFatTotais.map((fatdia, index) => (
               <DataTable.Row key={index}>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatdia.MetaDia) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatdia.VendaDia) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatdia.PerfDiaMeta) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatdia.PerfDiaVenda) * 1)} />}</DataTable.Cell>
                 <DataTable.Cell style={styles.colmedia}>
                   <Text
-                    style={((fatdia.FaltaVenderDia) * 1) > 0 ? { color: 'green' } : { color: 'red' }}
+                    style={((fatdia.PerfDiaFaltaVender) * 1) > 0 ? { color: 'green' } : { color: 'red' }}
                   >
-                    {<MoneyPTBR number={((fatdia.FaltaVenderDia) * 1)} />}
+                    {<MoneyPTBR number={((fatdia.PerfDiaFaltaVender) * 1)} />}
                   </Text>
                 </DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>
                   <Text
-                    style={((fatdia.PerfMetaDia) * 100).toFixed() > 100 ? { color: 'green' } : { color: 'red' }}
+                    style={((fatdia.PerfDiaPerf) * 100).toFixed() > 100 ? { color: 'green' } : { color: 'red' }}
                   >
-                    {((fatdia.PerfMetaDia) * 100).toFixed(2)}%
+                    {((fatdia.PerfDiaPerf) * 100).toFixed(2)}%
                   </Text>
                 </DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatdia.JurSParcDia) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>
-                  <Text
-                    style={((fatdia.PerfJurDia) * 100).toFixed() > 100 ? { color: 'green' } : { color: 'red' }}
-                  >
-                    {((fatdia.PerfJurDia) * 100).toFixed(2)}%
-                  </Text>
-                </DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fatdia.MediaDia) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={[styles.colmedia, {backgroundColor: 'red'}]}>{<MoneyPTBR number={((fatdia.MediaDia) * 1)} />}</DataTable.Cell>
               </DataTable.Row>
             ))}
           </DataTable>
         </ScrollView>
 
-        <PerformChart datagrafico={fatuGrafLojas} />
+        {/* Gráfico */}
 
       </ScrollView>
 

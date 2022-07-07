@@ -7,8 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment';
 
 export default function SCompDiario() {
-  const { comComparaDia, comTotais } = useContext(AuthContext);
-  const comparadia = comComparaDia.map((fatu) => (fatu));
+  const { sComComparativo, sComTotais, sFatTotais } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -17,43 +16,59 @@ export default function SCompDiario() {
         <DataTable>
           <DataTable.Header style={{ backgroundColor: '#eee' }}>
             <DataTable.Title style={styles.colpequena}>Ass.</DataTable.Title>
-            <DataTable.Title style={styles.colmedia}>Compra dia {comTotais[0].DiaAtual}</DataTable.Title>
-            <DataTable.Title style={styles.colmedia}>Compra dia  {comTotais[0].DiaAnterior}</DataTable.Title>
+            <DataTable.Title style={styles.colmedia}>Compra dia {sFatTotais[0].DiaAtual}</DataTable.Title>
+            <DataTable.Title style={styles.colmedia}>Compra dia  {sFatTotais[0].DiaAnterior}</DataTable.Title>
             <DataTable.Title style={styles.colmedia}>Compra Semana</DataTable.Title>
-            <DataTable.Title style={styles.colmedia}>Compra Mês</DataTable.Title>
+            <DataTable.Title style={styles.colgrande}>Compra Mês</DataTable.Title>
             <DataTable.Title style={styles.colpequena}>Rep.</DataTable.Title>
+            <DataTable.Title style={styles.colpequena}>-</DataTable.Title>
             <DataTable.Title style={styles.colpequena}>Prazo Médio</DataTable.Title>
           </DataTable.Header>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {comTotais.map((tot, index) => (
+            {sComTotais.map((tot, index) => (
               <DataTable.Row key={index} style={{ backgroundColor: '#f1f1f1' }}>
                 <DataTable.Cell style={styles.colpequena}>TOTAL</DataTable.Cell>
                 <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.CompraDia) * 1)} />}</DataTable.Cell>
                 <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.CompraAnterior) * 1)} />}</DataTable.Cell>
                 <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.CompraSemana) * 1)} />}</DataTable.Cell>
                 <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((tot.CompraMes) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((tot.Rep) * 100).toFixed(2)}%</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{((tot.RepMes) * 100).toFixed(2)}%</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}></DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>{parseInt(tot.PrazoMedio)}</DataTable.Cell>
               </DataTable.Row>
             ))}
-            {comparadia.map((fat, index) => (
-              <DataTable.Row key={index}>
-                <DataTable.Cell style={styles.colpequena}>{fat.Assoc}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.CompraDia) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.CompraAnterior) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.CompraSemana) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.CompraMes) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>
-                  <Text
-                    style={((fat.ColorRep) * 100).toFixed() > 0 ? { color: 'green' } : { color: 'red' }}
-                  >
-                    {((fat.Rep) * 100).toFixed(2)}
-                  </Text>
-                </DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{parseInt(fat.PrazoMedio)}</DataTable.Cell>
-              </DataTable.Row>
-            ))}
+
+            {sComComparativo
+              .sort((a, b) => (parseFloat(a.CompraMes) < parseFloat(b.CompraMes)) ? 1 : -1)
+              .map((fat, index) => (
+                <DataTable.Row key={index}>
+                  <DataTable.Cell style={styles.colpequena}>{fat.Associacao}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.CompraDia) * 1)} />}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.CompraAnterior) * 1)} />}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.CompraSemana) * 1)} />}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.CompraMes) * 1)} />}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>{((fat.RepMes) * 100).toFixed(2)}%</DataTable.Cell>
+
+                  <DataTable.Cell style={styles.colpequena}>
+                    <Text
+                      style={parseInt(fat.RepMesAnoColor) > 0 ? { color: 'green' } : { color: 'red' }}
+                    >
+                      {((fat.RepAno) * 100).toFixed(2)}%
+                    </Text>
+                  </DataTable.Cell>
+
+                  <DataTable.Cell style={styles.colpequena}>
+                    <Text
+                      style={parseInt(fat.PrazoMedioColor)  >  0 ? { color: 'green' } : { color: 'red' }}
+                    >
+                      {parseInt(fat.PrazoMedio)}
+                    </Text>
+
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+
           </ScrollView>
         </DataTable>
       </ScrollView>

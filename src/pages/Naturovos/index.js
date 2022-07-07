@@ -5,8 +5,7 @@ import moment from 'moment';
 import { AreaUm, BoxHome, ButtonArea, ContainerText, GraphArea, ScreenArea } from '../style';
 import { AuthContext } from '../../contexts/auth';
 import MoneyPTBR from '../../components/MoneyPTBR';
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryAnimation, VictoryLabel, VictoryPie } from "victory-native";
-import Svg, { Text } from 'react-native-svg';
+import CircularProgress from 'react-native-circular-progress-indicator';
 
 export default function Naturovos() {
 
@@ -19,18 +18,15 @@ export default function Naturovos() {
     if (value > 90) return "#10B981";
   });
 
-  const [metaAlc, setMetaAlc] = useState(0);
   const [margem, setMargem] = useState(0);
   const [projecao, setProjecao] = useState(0);
 
-  const vmetaalcancada = (vtotal[0].MetaAlcancada) * 100;
   const vmargem = (vtotal[0].Margem) * 100;
   const vprojecao = (vtotal[0].Projecao) * 100;
   useEffect(() => {
-    setMetaAlc(vmetaalcancada);
     setMargem(vmargem);
     setProjecao(vprojecao);
-  }, [vmetaalcancada, vmargem, vprojecao])
+  }, [ vmargem, vprojecao])
 
   return (
     <BoxHome>
@@ -65,73 +61,47 @@ export default function Naturovos() {
             </ContainerText>
 
           </AreaUm>
-          <AreaUm>
-            <Svg width={200} height={200}>
-              <VictoryPie
-                standalone={false}
-                animate={{ duration: 1000 }}
-                padAngle={0}
-                innerRadius={58}
-                width={200}
-                height={200}
-                data={[{ 'key': "", 'y': margem }, { 'key': "", 'y': (100 - margem) }]}
-                colorScale={[colorValid(margem), "#ccc"]}
-                // cornerRadius={25}
-                labelComponent={<Text />}
-                labels={() => null}
-              />
-              <VictoryLabel
-                textAnchor="middle" verticalAnchor="middle"
-                x={100} y={120}
-                text="Margem"
-                style={{ fontSize: 14, fontFamily: "Roboto-Bold" }}
-              />
-              <VictoryAnimation duration={1000} delay={0} data={margem}>
-                {(margem) => {
-                  return (
-                    <VictoryLabel
-                      textAnchor="middle" verticalAnchor="middle"
-                      x={100} y={90}
-                      text={`${(parseFloat(margem).toFixed())}%`}
-                      style={{ fontSize: 25, fontFamily: "Roboto-Bold" }}
-                    />
-                  );
-                }}
-              </VictoryAnimation>
-            </Svg>
-            <Svg width={200} height={200}>
-              <VictoryPie
-                standalone={false}
-                animate={{ duration: 1000 }}
-                padAngle={0}
-                innerRadius={58}
-                width={200}
-                height={200}
-                data={[{ 'key': "", 'y': projecao }, { 'key': "", 'y': (100 - projecao) }]}
-                colorScale={[colorValid(projecao), "#ccc"]}
-                // cornerRadius={25}
-                labelComponent={<Text />}
-                labels={() => null}
-              />
-              <VictoryLabel
-                textAnchor="middle" verticalAnchor="middle"
-                x={100} y={120}
-                text="Projeção"
-                style={{ fontSize: 14, fontFamily: "Roboto-Bold" }}
-              />
-              <VictoryAnimation duration={1000} delay={0} data={projecao}>
-                {(projecao) => {
-                  return (
-                    <VictoryLabel
-                      textAnchor="middle" verticalAnchor="middle"
-                      x={100} y={90}
-                      text={`${(parseFloat(projecao).toFixed())}%`}
-                      style={{ fontSize: 25, fontFamily: "Roboto-Bold" }}
-                    />
-                  );
-                }}
-              </VictoryAnimation>
-            </Svg>
+
+          <AreaUm paddingTop="45px">
+
+          <CircularProgress
+              value={margem}
+              radius={65}
+              duration={2000}
+              inActiveStrokeOpacity={0.4}
+              progressValueColor={colorValid(margem)}
+              activeStrokeColor={colorValid(margem)}
+              activeStrokeWidth={10}
+              inActiveStrokeWidth={10}
+              maxValue={100}
+              title={'Margem'}
+              titleColor={colorValid(margem)}
+              titleFontSize={12}
+              progressValueFontSize={30}
+              titleStyle={{ fontWeight: 'bold' }}
+              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+              valueSuffix={'%'}
+            />
+
+            <CircularProgress
+              value={projecao}
+              radius={65}
+              duration={2000}
+              inActiveStrokeOpacity={0.4}
+              progressValueColor={colorValid(projecao)}
+              activeStrokeColor={colorValid(projecao)}
+              activeStrokeWidth={10}
+              inActiveStrokeWidth={10}
+              maxValue={100}
+              title={'Projeção'}
+              titleColor={colorValid(projecao)}
+              titleFontSize={12}
+              progressValueFontSize={30}
+              titleStyle={{ fontWeight: 'bold' }}
+              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+              valueSuffix={'%'}
+            />
+
           </AreaUm>
 
         </GraphArea>

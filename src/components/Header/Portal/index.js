@@ -1,11 +1,11 @@
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AuthContext } from '../../../contexts/auth';
 import { BoxAtualiza, BoxTextAtualiza, InfoHeader, InfoLogged, TitleAtualiza, TopBarHome } from './style';
 
-export default function HeaderHome({ dtatu, startColor, endColor, bgStatus, title, subTitle, textColor, barStyle }) {
+export default function HeaderPortal({ dtatu, startColor, endColor, bgStatus, title, subTitle, textColor, barStyle }) {
 
     const { signOut, user } = useContext(AuthContext);
     const navigation = useNavigation();
@@ -23,13 +23,7 @@ export default function HeaderHome({ dtatu, startColor, endColor, bgStatus, titl
 
             <InfoLogged>
                 <InfoLogged.Left>
-
-                    {user.Rule > 0 ?
-                        <Icon name="ios-person-circle" size={20} color={textColor} />
-                        :
-                        <Icon name="ios-arrow-back-circle" size={20} color={textColor} onPress={() => navigation.goBack()} />
-                    }
-
+                    <Icon name="ios-person-circle" size={20} color={textColor} />
                 </InfoLogged.Left>
 
                 <InfoLogged.Middle>
@@ -39,11 +33,7 @@ export default function HeaderHome({ dtatu, startColor, endColor, bgStatus, titl
                 </InfoLogged.Middle>
 
                 <InfoLogged.Right>
-
-                    {user.Rule > 0 &&
-                        <Icon onPress={signOut} name="ios-exit-outline" size={20} color={textColor} />
-                    }
-
+                    <Icon onPress={signOut} name="ios-exit-outline" size={20} color={textColor} />
                 </InfoLogged.Right>
             </InfoLogged>
 
@@ -54,16 +44,11 @@ export default function HeaderHome({ dtatu, startColor, endColor, bgStatus, titl
                 <InfoHeader.SubTitle color={textColor}>
                     {subTitle}
                 </InfoHeader.SubTitle>
+                <TitleAtualiza color="#555">
+                    {dtatu}
+                </TitleAtualiza>
             </InfoHeader>
 
-            <BoxAtualiza bgcolor="#FFF">
-                <BoxTextAtualiza>
-                    <TitleAtualiza color="#555">
-                        {dtatu}
-                    </TitleAtualiza>
-                </BoxTextAtualiza>
-                {/* <Calendar colorCalendar={colorCalendar} /> */}
-            </BoxAtualiza>
 
         </TopBarHome>
     );

@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
 // Página Inicial
@@ -24,9 +24,11 @@ import Super from '../pages/Supermercados';
 import ResumoSuper from '../pages/Supermercados/ResumoSuper';
 import SCompras from '../pages/Supermercados/Compras';
 import SFaturamento from '../pages/Supermercados/Faturamento';
+import { AuthContext } from '../contexts/auth';
 
 
 export default function AppRoutes() {
+  const { user } = useContext(AuthContext);
   const AppStack = createStackNavigator();
   const LojasStack = createStackNavigator();
   const NaturStack = createStackNavigator();
@@ -55,20 +57,20 @@ export default function AppRoutes() {
   function NaturScreen() {
     return (
       <NaturStack.Navigator
-      screenOptions={{
-        headerShown: false,
-        gestureEnabled: true,
-        gestureDirection: "vertical",
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        presentation: 'transparentModal'
-      }}
+        screenOptions={{
+          headerShown: false,
+          gestureEnabled: true,
+          gestureDirection: "vertical",
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          presentation: 'transparentModal'
+        }}
       >
         <NaturStack.Screen name="Naturovos" component={Naturovos} options={{ headerShown: false }} />
         <LojasStack.Screen name="NResumo" component={NResumo} options={{ headerShown: false }} />
         <LojasStack.Screen name="NFaturamento" component={NFaturamento} options={{ headerShown: false }} />
         <LojasStack.Screen name="NCompras" component={NCompras} options={{ headerShown: false }} />
         <LojasStack.Screen name="NResumoFaturamento" component={NResumoFaturamento} options={{ headerShown: false }} />
-        
+
       </NaturStack.Navigator>
     )
   }
@@ -90,12 +92,28 @@ export default function AppRoutes() {
   });
 
   return (
-    <AppStack.Navigator
-    >
-      <AppStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-      <AppStack.Screen name="LojasScreen" component={LojasScreen} options={{ headerShown: false }} />
-      <AppStack.Screen name="NaturScreen" component={NaturScreen} options={{ headerShown: false }} />
-      <AppStack.Screen name="SuperScreen" component={SuperScreen} options={{ headerShown: false }} />
+    <AppStack.Navigator>
+      {user.Rule == 0 &&
+        <>
+          <AppStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <AppStack.Screen name="LojasScreen" component={LojasScreen} options={{ headerShown: false }} />
+          <AppStack.Screen name="NaturScreen" component={NaturScreen} options={{ headerShown: false }} />
+          <AppStack.Screen name="SuperScreen" component={SuperScreen} options={{ headerShown: false }} />
+        </>
+      }
+
+      {user.Rule == 1 &&
+        <AppStack.Screen name="LojasScreen" component={LojasScreen} options={{ headerShown: false }} />
+      }
+
+      {user.Rule == 2 &&
+        <AppStack.Screen name="SuperScreen" component={SuperScreen} options={{ headerShown: false }} />
+      }
+
+      {user.Rule == 5 &&
+        <AppStack.Screen name="NaturScreen" component={NaturScreen} options={{ headerShown: false }} />
+      }
+
     </AppStack.Navigator>
   );
 }

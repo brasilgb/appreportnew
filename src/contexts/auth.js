@@ -1,10 +1,17 @@
 import React, { useState, createContext, useEffect } from 'react';
 import api from '../services/api'
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
+
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [loadingCalendar, setLoadingCalendar] = useState(false);
+    const [loadingAuth, setLoadingAuth] = useState(false);
 
     // Data Resumos
     const [filiais, setFiliais] = useState([]);
@@ -79,6 +86,68 @@ export default function AuthProvider({ children }) {
         return moment(date).format('YYYY-MM-DD');
     }
 
+    function calendarData(dataf) {
+        setDataFiltro(dataf);
+        setLoadingCalendar(true);
+    }
+
+    // Armazena usuário no storage
+    useEffect(() => {
+        async function loadStorage() {
+            const storageUser = await AsyncStorage.getItem('Auth_user');
+            if (storageUser) {
+                setUser(JSON.parse(storageUser));
+                setLoading(false);
+            }
+            setLoading(false);
+        }
+        loadStorage();
+    }, []);
+
+    //Funcao para logar o usario
+    async function signIn(code, password) {
+        setLoadingAuth(true);
+        await api.post('login', { code: code, password: password })
+            .then((usuario) => {
+                if (usuario.data.sigIn.success) {
+                    let udata = {
+                        IdUsuario: usuario.data.sigIn.user.idusuario,
+                        Name: usuario.data.sigIn.user.name,
+                        Filial: usuario.data.sigIn.user.filial,
+                        Type: usuario.data.sigIn.user.type,
+                        Code: usuario.data.sigIn.user.code,
+                        Rule: usuario.data.sigIn.user.rule
+                    };
+                    console.log(udata);
+                    setUser(udata);
+                    storageUser(udata);
+                    setLoadingAuth(false);
+                } else {
+                    Alert.alert('Algo deu errado!', 'Redigite seu Email e/ou Senha!');
+                    setLoadingAuth(false);
+                }
+
+            })
+            .catch((error) => {
+                alert(error);
+                setLoadingAuth(false);
+            });
+    }
+
+    async function storageUser(data) {
+        await AsyncStorage.setItem('Auth_user', JSON.stringify(data));
+    }
+
+    async function signOut() {
+        await AsyncStorage.clear()
+            .then(() => {
+                setUser(null);
+            })
+    }
+
+
+
+
     // Extração de dados resumos filiais
     useEffect(() => {
         async function getFiliais() {
@@ -106,7 +175,7 @@ export default function AuthProvider({ children }) {
         }
         getAssociacoes();
     }, [dataFiltro]);
-// console.log(associacoes);
+    // console.log(associacoes);
 
     // Extração de dados resumos Exportações
     useEffect(() => {
@@ -135,7 +204,7 @@ export default function AuthProvider({ children }) {
         }
         getTotais();
     }, [dataFiltro]);
-//console.log(totais);
+    console.log(totais);
     // Extração de dados do faturamento
     useEffect(() => {
         async function getFatuLojas() {
@@ -595,8 +664,8 @@ export default function AuthProvider({ children }) {
     useEffect(() => {
         async function getNResAssoc() {
             await api.get(`nresassoc/${dtFormatada(dataFiltro)}`)
-                .then(nrassoc => {
-                    setNResAssoc(nrassoc.data);
+                .then(assoc => {
+                    setNResAssoc(assoc.data);
                 })
                 .catch(err => {
                     console.log(err)
@@ -609,7 +678,7 @@ export default function AuthProvider({ children }) {
      * Load dados relatórios supermercados #########################################################################################################
      */
 
-    // Faturamento Supermercados Faturamento Performance Mês *************************
+    // Faturamento Supermercados Faturamento Totais Faturamento *************************
     useEffect(() => {
         async function getSFatTotais() {
             await api.get(`sfattotais/${dtFormatada(dataFiltro)}`)
@@ -621,6 +690,7 @@ export default function AuthProvider({ children }) {
                 });
         }
         getSFatTotais();
+
     }, [dataFiltro]);
 
     // Faturamento Supermercados Faturamento Performance Mês *************************
@@ -679,9 +749,7 @@ export default function AuthProvider({ children }) {
         getSFatComparativo();
     }, [dataFiltro]);
 
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    // Compras Supermercados Faturamento Performance Mês *************************
+    // Compras Supermercados Compras Totais *************************
     useEffect(() => {
         async function getSComTotais() {
             await api.get(`scomtotais/${dtFormatada(dataFiltro)}`)
@@ -695,7 +763,7 @@ export default function AuthProvider({ children }) {
         getSComTotais();
     }, [dataFiltro]);
 
-    // Compras Supermercados Faturamento Performance Mês *************************
+    // Compras Supermercados Compras Performance Mês *************************
     useEffect(() => {
         async function getSComPerfMes() {
             await api.get(`scomperfmes/${dtFormatada(dataFiltro)}`)
@@ -707,9 +775,13 @@ export default function AuthProvider({ children }) {
                 });
         }
         getSComPerfMes();
+        //     const interval = setInterval(() => {
+        //         getSComPerfMes();
+        //     }, 10000);
+        // return () => clearInterval(interval);
     }, [dataFiltro]);
 
-    // Compras Supermercados Faturamento Performance Associação *************************
+    // Compras Supermercados Compras Performance Associação *************************
     useEffect(() => {
         async function getSComPerfAssoc() {
             await api.get(`scomperfassoc/${dtFormatada(dataFiltro)}`)
@@ -723,7 +795,7 @@ export default function AuthProvider({ children }) {
         getSComPerfAssoc();
     }, [dataFiltro]);
 
-    // Compras Supermercados Faturamento Gráfico *************************
+    // Compras Supermercados Compras Gráfico *************************
     useEffect(() => {
         async function getSComGrafico() {
             await api.get(`scomgrafico/${dtFormatada(dataFiltro)}`)
@@ -749,11 +821,22 @@ export default function AuthProvider({ children }) {
                 });
         }
         getSComComparativo();
+        const interval = setInterval(() => {
+            getSComComparativo();
+        }, 10000);
+        return () => clearInterval(interval);
     }, [dataFiltro]);
 
     return (
 
         <AuthContext.Provider value={{
+            signed: !!user,
+            user,
+            signIn,
+            signOut,
+            loadingAuth,
+            loadingCalendar,
+            calendarData,
             filiais,
             associacoes,
             exportacoes,

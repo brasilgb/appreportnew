@@ -6,57 +6,48 @@ import { AuthContext } from '../../../../contexts/auth';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function PerformanceAssociacao() {
-  const { fatuPerfAssocLojas, fatuTotPerfLojas } = useContext(AuthContext);
-  const assoclojas = fatuPerfAssocLojas.map((fatu) => (fatu));
-  const assoctotlojas = fatuTotPerfLojas.map((fatut) => (fatut));
+  const { sFatTotais, sFatPerfAssoc } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <DataTable>
-          <DataTable.Header style={{backgroundColor: '#eee'}}>
+          <DataTable.Header style={{ backgroundColor: '#eee' }}>
             <DataTable.Title style={styles.colpequena}>Ass.</DataTable.Title>
             <DataTable.Title style={styles.colgrande}>Faturamento</DataTable.Title>
-            <DataTable.Title style={styles.colpequena}>Margem</DataTable.Title>
+            <DataTable.Title style={styles.colmedia}>Margem</DataTable.Title>
             <DataTable.Title style={styles.colpequena}>Rep. Fat.</DataTable.Title>
-            <DataTable.Title style={styles.colpequena}>Jur.S/Fat.</DataTable.Title>
-            <DataTable.Title style={styles.colmedia}>Rep.Juros</DataTable.Title>
-            <DataTable.Title style={styles.colpequena}>Margem</DataTable.Title>
             <DataTable.Title style={styles.colmedia}>Estoque</DataTable.Title>
-            <DataTable.Title style={styles.colmedia}>Giro</DataTable.Title>
+            <DataTable.Title style={styles.colpequena}>Giro</DataTable.Title>
             <DataTable.Title style={styles.colpequena}>Rep.Est.</DataTable.Title>
           </DataTable.Header>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {assoctotlojas.map((tot, index) => (
-              <DataTable.Row key={index} style={{backgroundColor: '#f1f1f1'}}>
+            {sFatTotais.map((tot, index) => (
+              <DataTable.Row key={index} style={{ backgroundColor: '#f1f1f1' }}>
                 <DataTable.Cell style={styles.colpequena}>TOTAL</DataTable.Cell>
-                <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((tot.FaturamentoAss) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((tot.MargemAss) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((tot.RepFatAss) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((tot.RepJurosAss) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.JurSFatAss) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((tot.RepJurosAss) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.EstoqueAss) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.GiroAss) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((tot.RepEstoqueAss) * 100).toFixed(2)}%</DataTable.Cell>
-               </DataTable.Row>
+                <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((tot.FatuPerfAssoc) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{((tot.MargemPerfAssoc) * 100).toFixed(2)}%</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{((tot.RepFatPerfAssoc) * 100).toFixed(2)}%</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.EstoquePerfAssoc) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{(parseFloat(tot.GiroPerfAssoc)).toFixed()}</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{((tot.RepEstoquePerfAssoc) * 100).toFixed(2)}%</DataTable.Cell>
+              </DataTable.Row>
             ))}
-            {assoclojas.map((ass, index) => (
-              <DataTable.Row key={index}>
-                <DataTable.Cell style={styles.colpequena}>{ass.Assoc}</DataTable.Cell>
-                <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((ass.Faturamento) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((ass.Margem) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((ass.RepFat) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((ass.RepJuros) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((ass.JurSFat) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((ass.RepJuros) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((ass.Estoque) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((ass.Giro) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((ass.RepEstoque) * 100).toFixed(2)}%</DataTable.Cell>
-               </DataTable.Row>
-            ))}
+            {sFatPerfAssoc
+              .sort((a, b) => (parseFloat(a.Faturamento) < parseFloat(b.Faturamento)) ? 1 : -1)
+              .map((ass, index) => (
+                <DataTable.Row key={index}>
+                  <DataTable.Cell style={styles.colpequena}>{ass.Associacao}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((ass.Faturamento) * 1)} />}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colmedia}>{((ass.Margem) * 100).toFixed(2)}%</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>{((ass.RepFat) * 100).toFixed(2)}%</DataTable.Cell>
+                  <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((ass.Estoque) * 1)} />}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>{(parseFloat(ass.Giro)).toFixed()}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>{((ass.RepEstoque) * 100).toFixed(2)}%</DataTable.Cell>
+                </DataTable.Row>
+              ))}
           </ScrollView>
 
         </DataTable>

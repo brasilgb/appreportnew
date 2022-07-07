@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { AuthContext } from '../../../../contexts/auth';
-import ComprasChart from '../../../../components/Charts/ComprasChart';
 export default function CPerformance() {
 
   const { nComGrafico } = useContext(AuthContext);
@@ -12,7 +11,7 @@ export default function CPerformance() {
     <View style={styles.container}>
 
       <ScrollView>
-        <ComprasChart datagrafico={nComGrafico} />
+        {/*  Gráfico */}
       </ScrollView>
 
     </View>

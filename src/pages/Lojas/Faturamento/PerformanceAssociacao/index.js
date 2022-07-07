@@ -39,7 +39,7 @@ export default function PerformanceAssociacao() {
                 <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.JurSFatAss) * 1)} />}</DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>{((tot.RepJurosAss) * 100).toFixed(2)}%</DataTable.Cell>
                 <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.EstoqueAss) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.GiroAss) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{parseInt(tot.GiroAss)}</DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>{((tot.RepEstoqueAss) * 100).toFixed(2)}%</DataTable.Cell>
                </DataTable.Row>
             ))}
@@ -53,7 +53,7 @@ export default function PerformanceAssociacao() {
                 <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((ass.JurSFat) * 1)} />}</DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>{((ass.RepJuros) * 100).toFixed(2)}%</DataTable.Cell>
                 <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((ass.Estoque) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((ass.Giro) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{parseInt(ass.Giro)}</DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>{((ass.RepEstoque) * 100).toFixed(2)}%</DataTable.Cell>
                </DataTable.Row>
             ))}

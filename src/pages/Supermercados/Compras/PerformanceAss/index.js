@@ -6,32 +6,34 @@ import { ScrollView } from 'react-native-gesture-handler';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
 
 export default function CPerformanceAss() {
-  const { comPerfAssoc, comTotais } = useContext(AuthContext);
-  const compass = comPerfAssoc.map((fatu) => (fatu));
+  const { sComPerfAssoc, sComTotais } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <DataTable>
           <DataTable.Header style={{backgroundColor: '#eee'}}>
-            <DataTable.Title style={styles.colmedia}>Ass.</DataTable.Title>
+            <DataTable.Title style={styles.colmedia}>Ass</DataTable.Title>
             <DataTable.Title style={styles.colmedia}>Compras</DataTable.Title>
             <DataTable.Title style={styles.colpequena}>Rep.</DataTable.Title>
             <DataTable.Title style={styles.colpequena}>Prazo Médio</DataTable.Title>
           </DataTable.Header>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {comTotais.map((tot, index) => (
+            {sComTotais.map((tot, index) => (
               <DataTable.Row key={index} style={{backgroundColor: '#f1f1f1'}}>
                 <DataTable.Cell style={styles.colmedia}>TOTAL</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.ComprasAssoc) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((tot.RepAssoc) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{parseInt(tot.PrazoMedioAssoc)}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.ComprasPerfAssoc) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{((tot.RepPerfAssoc) * 100).toFixed(2)}%</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{parseInt(tot.PrazoMedioPerfAssoc)}</DataTable.Cell>
               </DataTable.Row>
             ))}
-            {compass.map((fat, index) => (
+
+            {sComPerfAssoc
+              .sort((a, b) => (parseFloat(a.Compras) < parseFloat(b.Compras)) ? 1 : -1)
+              .map((fat, index) => (
               <DataTable.Row key={index}>
-                <DataTable.Cell style={styles.colmedia}>{fat.Assoc}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{fat.Associacao}</DataTable.Cell>
                 <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.Compras) * 1)} />}</DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>{((fat.Rep) * 100).toFixed(2)}%</DataTable.Cell>
                 <DataTable.Cell style={styles.colpequena}>{parseInt(fat.PrazoMedio)}</DataTable.Cell>

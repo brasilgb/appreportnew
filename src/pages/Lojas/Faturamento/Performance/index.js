@@ -6,7 +6,6 @@ import { DataTable } from 'react-native-paper';
 import { AuthContext } from '../../../../contexts/auth';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
 import moment from 'moment';
-import PerformChart from '../../../../components/Charts/PerformChart';
 
 export default function Performance() {
 
@@ -103,7 +102,7 @@ export default function Performance() {
           </DataTable>
         </ScrollView>
 
-        <PerformChart datagrafico={fatuGrafLojas} />
+        {/* Gráfico */}
 
       </ScrollView>
 

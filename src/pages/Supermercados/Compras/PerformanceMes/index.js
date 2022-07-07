@@ -6,8 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
 
 export default function CPerformanceMes() {
-  const { comPerfMes, comTotais } = useContext(AuthContext);
-  const compass = comPerfMes.map((fatu) => (fatu));
+  const { sComPerfMes, sComTotais } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -21,20 +20,24 @@ export default function CPerformanceMes() {
           </DataTable.Header>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {comTotais.map((tot, index) => (
+
+            {sComTotais.map((tot, index) => (
               <DataTable.Row key={index} style={{ backgroundColor: '#f1f1f1' }}>
                 <DataTable.Cell style={styles.colmedia}>TOTAL</DataTable.Cell>
-                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.MediaCompraMes) * 1)} />}</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{((tot.RepMes) * 100).toFixed(2)}%</DataTable.Cell>
-                <DataTable.Cell style={styles.colpequena}>{parseInt(tot.PrazoMedioMes)}</DataTable.Cell>
+                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.MediaCompraPerfMes) * 1)} />}</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{((tot.RepPerfMes) * 100).toFixed(2)}%</DataTable.Cell>
+                <DataTable.Cell style={styles.colpequena}>{parseInt(tot.PrazoMedioPerfMes)}</DataTable.Cell>
               </DataTable.Row>
             ))}
-            {compass.map((fat, index) => (
+
+            {sComPerfMes
+              .sort((a, b) => (parseFloat(a.AnoMesNum) < parseFloat(b.AnoMesNum)) ? 1 : -1)
+              .map((fat, index) => (
               <DataTable.Row key={index}>
                 <DataTable.Cell style={styles.colmedia}>{fat.MesAno}</DataTable.Cell>
                 <DataTable.Cell style={styles.colmedia}>
                   <Text
-                    style={((fat.MediaCompra) * 1) > ((fat.ColorMedia) * 1) ? { color: 'green' } : { color: 'red' }}
+                    style={((fat.MediaCompra) * 1) < ((sComTotais[0].MediaCompraPerfMes) * 1) ? { color: 'green' } : { color: 'red' }}
                   >
                     {<MoneyPTBR number={((fat.MediaCompra) * 1)} />}
                   </Text>

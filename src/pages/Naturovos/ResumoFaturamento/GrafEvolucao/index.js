@@ -6,8 +6,6 @@ import { DataTable } from 'react-native-paper';
 import { AuthContext } from '../../../../contexts/auth';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
 import moment from 'moment';
-import NPerformChart from '../../../../components/Charts/NPerformChart';
-import NEvolucao from '../../../../components/Charts/NEvolucao';
 
 export default function GrafEvolucao() {
 
@@ -41,9 +39,7 @@ export default function GrafEvolucao() {
           </DataTable>
         ))}
 
-          <NEvolucao nResGrafico={nResGrafico} />
-
-        {/* <NPerformChart datagrafico={nResGrafico} /> */}
+         {/* Gráfico */}
 
       </ScrollView>
 

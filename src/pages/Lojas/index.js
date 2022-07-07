@@ -5,13 +5,14 @@ import moment from 'moment';
 import { AreaUm, BoxHome, ButtonArea, ContainerText, GraphArea, ScreenArea } from '../style';
 import { AuthContext } from '../../contexts/auth';
 import MoneyPTBR from '../../components/MoneyPTBR';
-import Progress from '../../components/Charts/Progress';
+import CircularProgress from 'react-native-circular-progress-indicator';
+import { Text } from 'react-native';
 
 export default function Lojas() {
 
-  const { totais } = useContext(AuthContext);
-  const vtotal = totais.filter((dep) => (dep.Departamento === 1)).map(tot => tot);
-
+  const { user, totais } = useContext(AuthContext);
+  const vtotal = totais.filter((dep) => (dep.Departamento === 1));
+console.log(vtotal)
   const colorValid = ((value) => {
     if (value <= 90) return "#DC2626";
     if (value <= 98) return "#F18800";
@@ -57,25 +58,68 @@ export default function Lojas() {
               <ContainerText.Value color={colorValid(vtotal[0].MetaAlcancada)}> <MoneyPTBR number={parseFloat(vtotal[0].Faturamento)} /> </ContainerText.Value>
             </ContainerText>
           </AreaUm>
+          <AreaUm><Text>Textohsxhsxhsxasxh</Text></AreaUm>
 
-          <AreaUm height="120px" paddingTop="-10px">
+          <AreaUm height="120px" paddingTop="45px">
 
-            <Progress
-              bgcolor={colorValid(metaAlc)}
+            <CircularProgress
               value={metaAlc}
+              radius={65}
+              duration={2000}
+              inActiveStrokeOpacity={0.4}
+              progressValueColor={colorValid(metaAlc)}
+              activeStrokeColor={colorValid(metaAlc)}
+              activeStrokeWidth={10}
+              inActiveStrokeWidth={10}
+              maxValue={100}
+              title={'Meta'}
+              titleColor={colorValid(metaAlc)}
+              titleFontSize={12}
+              progressValueFontSize={30}
+              titleStyle={{ fontWeight: 'bold' }}
+              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+              valueSuffix={'%'}
             />
 
           </AreaUm>
-          <AreaUm>
+          <AreaUm paddingTop="55px">
 
-            <Progress
-              bgcolor={colorValid(margem)}
+            <CircularProgress
               value={margem}
+              radius={65}
+              duration={2000}
+              inActiveStrokeOpacity={0.4}
+              progressValueColor={colorValid(margem)}
+              activeStrokeColor={colorValid(margem)}
+              activeStrokeWidth={10}
+              inActiveStrokeWidth={10}
+              maxValue={100}
+              title={'Margem'}
+              titleColor={colorValid(margem)}
+              titleFontSize={12}
+              progressValueFontSize={30}
+              titleStyle={{ fontWeight: 'bold' }}
+              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+              valueSuffix={'%'}
             />
 
-            <Progress
-              bgcolor={colorValid(projecao)}
+            <CircularProgress
               value={projecao}
+              radius={65}
+              duration={2000}
+              inActiveStrokeOpacity={0.4}
+              progressValueColor={colorValid(projecao)}
+              activeStrokeColor={colorValid(projecao)}
+              activeStrokeWidth={10}
+              inActiveStrokeWidth={10}
+              maxValue={100}
+              title={'Projeção'}
+              titleColor={colorValid(projecao)}
+              titleFontSize={12}
+              progressValueFontSize={30}
+              titleStyle={{ fontWeight: 'bold' }}
+              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+              valueSuffix={'%'}
             />
 
           </AreaUm>
