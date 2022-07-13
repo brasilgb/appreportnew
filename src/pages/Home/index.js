@@ -1,18 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useContext } from 'react';
-import { Image, StatusBar, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Image } from 'react-native';
 import HeaderPortal from '../../components/Header/Portal';
-import { AuthContext } from '../../contexts/auth';
-
 
 import { LButtonMaster, BoxHome, ContainerPortal } from './style';
 
 export default function Home() {
-    const { signOut, fatuTotLojas } = useContext(AuthContext);
  
     const navigation = useNavigation();
     return (
@@ -53,32 +47,6 @@ export default function Home() {
                 >
                     <Image source={require('../../assets/super.png')} />
                 </LButtonMaster>
-
-                {/* <TouchableOpacity
-                onPress={signOut}
-                style={{
-                    // flex: 1,
-                    width: 40,
-                    height: 40,
-                    backgroundColor: "#dc2626",
-                    // paddingHorizontal: 8,
-                    // paddingVertical: 6,
-                    borderRadius: 5,
-                    elevation: 2,
-                    // borderWidth: 1,
-                    // borderColor: '#dedede'
-                }}
-
-            >
-                <LinearGradient colors={["#ff0000", "#dc2626", "#fc3e2d"]}
-                    style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 5, borderWidth: 1,  borderColor: '#dc2626', padding: 2,  }}
-                    start={{ x: 0.1, y: 0.8 }}
-                    end={{ x: 0.1, y: 0.1 }}
-                >
-                    <Icon name="ios-exit-outline" size={25} color="#fdfdfd" />
-                </LinearGradient>
-
-            </TouchableOpacity> */}
             </ContainerPortal>
         </BoxHome>
 

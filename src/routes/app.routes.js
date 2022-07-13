@@ -77,7 +77,15 @@ export default function AppRoutes() {
 
   function SuperScreen() {
     return (
-      <SuperStack.Navigator>
+      <SuperStack.Navigator
+        screenOptions={{
+          headerShown: false,
+          gestureEnabled: true,
+          gestureDirection: "vertical",
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          presentation: 'transparentModal'
+        }}
+      >
         <SuperStack.Screen name="Super" component={Super} options={{ headerShown: false }} />
         <SuperStack.Screen name="ResumoSuper" component={ResumoSuper} options={{ headerShown: false }} />
         <SuperStack.Screen name="SCompras" component={SCompras} options={{ headerShown: false }} />
@@ -92,7 +100,15 @@ export default function AppRoutes() {
   });
 
   return (
-    <AppStack.Navigator>
+    <AppStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: true,
+        gestureDirection: "vertical",
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        presentation: 'transparentModal'
+      }}
+    >
       {user.Rule == 0 &&
         <>
           <AppStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
