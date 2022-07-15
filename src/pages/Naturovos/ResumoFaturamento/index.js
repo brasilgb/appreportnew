@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import HeaderPage from '../../../components/Header/Page';
 import { BoxHome, TabContainer } from '../../style';
@@ -8,9 +8,25 @@ const ResumoTab = createMaterialTopTabNavigator();
 import { AuthContext } from '../../../contexts/auth';
 import ResFaturamento from './ResFaturamento';
 import GrafEvolucao from './GrafEvolucao';
+import api from '../../../services/api';
 
 export default function NResumoFaturamento() {
-    const { nResTotal } = useContext(AuthContext);
+
+    const { dtFormatada, dataFiltro } = useContext(AuthContext);
+    const [nResTotal, setNResTotal] = useState([]);
+
+    useEffect(() => {
+        async function getNResTotal() {
+            await api.get(`nrestotais/${dtFormatada(dataFiltro)}`)
+                .then(nrestotais => {
+                    setNResTotal(nrestotais.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getNResTotal();
+    }, [dataFiltro]);
 
     return (
         <BoxHome>
@@ -21,7 +37,7 @@ export default function NResumoFaturamento() {
                 bgStatus="#F5AB00"
                 title="Naturovos"
                 subTitle="ADM Resumo"
-                dtatu={moment(nResTotal[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+                dtatu={moment(nResTotal[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
             />
             <TabContainer>
                 <ResumoTab.Navigator

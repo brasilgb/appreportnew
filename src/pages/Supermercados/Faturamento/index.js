@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import HeaderPage from '../../../components/Header/Page';
 import { BoxHome, TabContainer } from '../../style';
@@ -10,9 +10,25 @@ import ResumoDiario from './ResumoDiario';
 const ResumoTab = createMaterialTopTabNavigator();
 
 import { AuthContext } from '../../../contexts/auth';
+import api from '../../../services/api';
 
 export default function SFaturamento() {
-    const { totais } = useContext(AuthContext);
+
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [sFatTotais, setSFatTotais] = useState([]);
+
+  useEffect(() => {
+          async function getSFatTotais() {
+              await api.get(`sfattotais/${dtFormatada(dataFiltro)}`)
+                  .then(sfattotais => {
+                    setSFatTotais(sfattotais.data);
+                  })
+                  .catch(err => {
+                      console.log(err);
+                  })
+          }
+          getSFatTotais();
+      }, [dataFiltro]);
 
     return (
         <BoxHome>
@@ -23,7 +39,7 @@ export default function SFaturamento() {
                 bgStatus="#f26000"
                 title="Supermercados"
                 subTitle="Faturamento"
-                dtatu={moment(totais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+                dtatu={moment(sFatTotais[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
             />
             <TabContainer>
                 <ResumoTab.Navigator

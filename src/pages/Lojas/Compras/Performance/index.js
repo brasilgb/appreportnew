@@ -1,18 +1,43 @@
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useContext, useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
 import { AuthContext } from '../../../../contexts/auth';
+import api from '../../../../services/api';
+import Loading from '../../../../components/Loading';
+
 export default function CPerformance() {
 
-  const { fatuTotLojas, comGrafico } = useContext(AuthContext);
-  
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false)
+  const [comGrafico, setComGrafico] = useState(0);
+
+  // Extração de dados resumos totais
+  useEffect(() => {
+      async function getComGrafico() {
+        setLoading(true);
+        await api.get(`comgrafico/${dtFormatada(dataFiltro)}`)
+          .then(comgrafico => {
+            setComGrafico(comgrafico.data);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+      getComGrafico();
+    }, [dataFiltro]);
+
   return (
     <View style={styles.container}>
+      {loading
+        ?
+        <Loading />
+        :
+        <ScrollView>
+          {/* Gráfico {comGrafico}*/}<Text>Gráfico</Text>
+        </ScrollView>
+      }
 
-      <ScrollView>
-        {/* Gráfico */}
-      </ScrollView>
 
     </View>
   );

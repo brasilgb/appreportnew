@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import MoneyPTBR from '../../../../../components/MoneyPTBR';
@@ -7,15 +7,14 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ResAssoc from '../ResAssoc';
+import api from '../../../../../services/api';
 
 export default function ResGrupo({ setorName, nfatuGrupo }) {
     const { width, height } = Dimensions.get('screen');
     const modalizeRef = useRef(null);
 
-    const {
-
-        nfatuAssoc,
-    } = useContext(AuthContext);
+    const { dtFormatada, dataFiltro } = useContext(AuthContext);
+    const [nfatuAssoc, setNfatuAssoc] = useState([]);
 
     const [grupoName, setGrupoName] = useState('');
 
@@ -28,6 +27,20 @@ export default function ResGrupo({ setorName, nfatuGrupo }) {
 
     };
 
+    // Extração de dados resumos totais
+    useEffect(() => {
+            async function getNfatuAssoc() {
+                await api.get(`nfatuassoc/${dtFormatada(dataFiltro)}`)
+                    .then(nfatuassoc => {
+                        setNfatuAssoc(nfatuassoc.data);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+            getNfatuAssoc();
+        }, [dataFiltro]);
+        
     return (
 
         <View style={styles.container}>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import HeaderPage from '../../../components/Header/Page';
 import { AuthContext } from '../../../contexts/auth';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -11,10 +11,26 @@ import CPerformance from './Performance';
 import CPerformanceAss from './PerformanceAss';
 import CPerformanceMes from './PerformanceMes';
 import { BoxHome, TabContainer } from '../../style';
+import api from '../../../services/api';
 
 export default function SCompras() {
 
-  const { comTotais } = useContext(AuthContext);
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [sComTotais, setSComTotais] = useState([]);
+
+  // Extração de dados resumos totais
+  useEffect(() => {
+          async function getSComTotais() {
+              await api.get(`scomtotais/${dtFormatada(dataFiltro)}`)
+                  .then(scomtotais => {
+                    setSComTotais(scomtotais.data);
+                  })
+                  .catch(err => {
+                      console.log(err);
+                  })
+          }
+          getSComTotais();
+      }, [dataFiltro]);
 
   return (
     <BoxHome>
@@ -25,7 +41,7 @@ export default function SCompras() {
         bgStatus="#f26000"
         title="Supermercados"
         subTitle="Compras"
-        dtatu={moment(comTotais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+        dtatu={moment(sComTotais[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
       />
 
       <TabContainer>

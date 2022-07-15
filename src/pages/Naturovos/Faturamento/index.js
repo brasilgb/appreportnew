@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import HeaderPage from '../../../components/Header/Page';
 import { BoxHome, TabContainer } from '../../style';
@@ -7,12 +7,29 @@ import Performance from './Performance';
 import PerformanceAssociacao from './PerformanceAssociacao/index.js';
 import PerformanceMes from './PerformanceMes';
 import ResumoDiario from './NResumo';
+import api from '../../../services/api';
 const ResumoTab = createMaterialTopTabNavigator();
 
 import { AuthContext } from '../../../contexts/auth';
 
 export default function NFaturamento() {
-    const { nfatuTotais } = useContext(AuthContext);
+
+    const { dtFormatada, dataFiltro } = useContext(AuthContext);
+    const [nfatuTotais, setNfatuTotais] = useState([]);
+  
+    // Extração de dados resumos totais
+    useEffect(() => {
+            async function getNfatuTotais() {
+                await api.get(`nfatutotais/${dtFormatada(dataFiltro)}`)
+                    .then(nfatutotais => {
+                        setNfatuTotais(nfatutotais.data);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+            getNfatuTotais();
+        }, [dataFiltro]);
 
     return (
         <BoxHome>
@@ -23,7 +40,7 @@ export default function NFaturamento() {
                 bgStatus="#F5AB00"
                 title="Naturovos"
                 subTitle="Faturamento"
-                dtatu={moment(nfatuTotais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+                dtatu={moment(nfatuTotais[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
             />
             <TabContainer>
                 <ResumoTab.Navigator

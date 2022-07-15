@@ -1,13 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
-import moment from 'moment';
-import React, { useContext } from 'react';
+import React from 'react';
 import { Image } from 'react-native';
 import HeaderPortal from '../../components/Header/Portal';
-
+import { useNavigation } from '@react-navigation/native';
 import { LButtonMaster, BoxHome, ContainerPortal } from './style';
 
 export default function Home() {
- 
+
     const navigation = useNavigation();
     return (
 

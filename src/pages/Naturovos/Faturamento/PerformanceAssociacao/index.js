@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import moment from 'moment';
@@ -8,84 +8,133 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import ResGrupo from './ResGrupo';
 import Icon from 'react-native-vector-icons/Ionicons';
+import api from '../../../../services/api';
+import Loading from '../../../../components/Loading';
 
 export default function PerformanceAssociacao() {
     const { width, height } = Dimensions.get('screen');
     const modalizeRef = useRef(null);
 
-    const {
-        nfatuPerfSetor,
-        nfatuPerfGrupo,
-        nfatuTotais
-    } = useContext(AuthContext);
+    const { dtFormatada, dataFiltro } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false)
+    const [nfatuTotais, setNfatuTotais] = useState([]);
+    const [nfatuPerfSetor, setNfatuPerfSetor] = useState([]);
+    const [nfatuPerfGrupo, setNfatuPerfGrupo] = useState([]);
 
     const [setorName, setSetorName] = useState('');
 
     const openGrupo = () => {
         modalizeRef.current?.open();
     };
-
+ 
     const nameSetor = (setor) => {
         setSetorName(setor);
     };
+    
+    useEffect(() => {
+        async function getNfatuPerfSetor() {
+            setLoading(true);
+            await api.get(`nfatuperfsetor/${dtFormatada(dataFiltro)}`)
+                .then(nfatuperfsetor => {
+                    setNfatuPerfSetor(nfatuperfsetor.data);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getNfatuPerfSetor();
+
+        async function getNfatuPerfGrupo() {
+            setLoading(true);
+            await api.get(`nfatuperfgrupo/${dtFormatada(dataFiltro)}`)
+                .then(nfatuperfgrupo => {
+                    setNfatuPerfGrupo(nfatuperfgrupo.data);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getNfatuPerfGrupo();
+
+        async function getNfatuTotais() {
+            setLoading(true);
+            await api.get(`nfatutotais/${dtFormatada(dataFiltro)}`)
+                .then(nfatutotais => {
+                    setNfatuTotais(nfatutotais.data);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getNfatuTotais();
+
+    }, [dataFiltro]);
 
     return (
         <View style={styles.container}>
+            {loading
+                ?
+                <Loading />
+                :
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    <DataTable>
+                        <DataTable.Header style={{ backgroundColor: '#E5E5EA' }}>
+                            <DataTable.Title style={styles.colgrande}>Setor</DataTable.Title>
+                            <DataTable.Title style={styles.colgrande}>Faturamento</DataTable.Title>
+                            <DataTable.Title style={styles.colpequena}>Margem</DataTable.Title>
+                            <DataTable.Title style={styles.colpequena}>Rep. Total</DataTable.Title>
+                            <DataTable.Title style={styles.colpequena}>Preço Médio</DataTable.Title>
+                            <DataTable.Title style={styles.colmedia}>Preço Méd. Kg/Liq</DataTable.Title>
+                            <DataTable.Title style={styles.colgrande}>Fatu. + EC</DataTable.Title>
+                            <DataTable.Title style={styles.colpequena}>Rep. + EC</DataTable.Title>
+                            <DataTable.Title style={styles.colpequena}>Margem + EC</DataTable.Title>
+                        </DataTable.Header>
 
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                <DataTable>
-                    <DataTable.Header style={{ backgroundColor: '#E5E5EA' }}>
-                        <DataTable.Title style={styles.colgrande}>Setor</DataTable.Title>
-                        <DataTable.Title style={styles.colgrande}>Faturamento</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Margem</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Rep. Total</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Preço Médio</DataTable.Title>
-                        <DataTable.Title style={styles.colmedia}>Preço Méd. Kg/Liq</DataTable.Title>
-                        <DataTable.Title style={styles.colgrande}>Fatu. + EC</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Rep. + EC</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Margem + EC</DataTable.Title>
-                    </DataTable.Header>
-
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        {nfatuTotais.map((fat, index) => (
-                            <DataTable.Row key={index} style={{ backgroundColor: '#E5E5EA' }}>
-                                <DataTable.Cell style={styles.colgrande}>TOTAL</DataTable.Cell>
-                                <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.PAssFaturamento) * 1)} />}</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fat.PAssMargem) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fat.PAssRepTotal) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>-</DataTable.Cell>
-                                <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.PAssPrecoMedioKg) * 1)} />}</DataTable.Cell>
-                                <DataTable.Cell style={styles.colgrande}><MoneyPTBR number={((fat.PAssFaturamentoEC) * 1)} /></DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fat.PAssRepEC) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fat.PAssMargemEC) * 100).toFixed(2)}%</DataTable.Cell>
-
-                            </DataTable.Row>
-                        ))}
-                        {nfatuPerfSetor.sort((a, b) => (parseFloat(a.Faturamento) < parseFloat(b.Faturamento)) ? 1 : -1)
-                            .map((fat, index) => (
-
-                                <DataTable.Row key={index} style={{ backgroundColor: index % 2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>
-                                    <DataTable.Cell style={styles.colgrande}>
-                                        <TouchableOpacity onPress={() => { openGrupo(); nameSetor(fat.Setor) }} style={styles.btnModal}>
-                                            <Icon style={{ marginRight: 2, paddingTop: 3 }} name="ios-arrow-redo" size={14} color="#333" />
-                                            <Text style={{ color: '#333' }}>{fat.Setor}</Text>
-                                        </TouchableOpacity>
-                                    </DataTable.Cell>
-                                    <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.Faturamento) * 1)} />}</DataTable.Cell>
-                                    <DataTable.Cell style={styles.colpequena}>{((fat.Margem) * 100).toFixed(2)}%</DataTable.Cell>
-                                    <DataTable.Cell style={styles.colpequena}>{((fat.RepTotal) * 100).toFixed(2)}%</DataTable.Cell>
-                                    <DataTable.Cell style={styles.colpequena}>{<MoneyPTBR number={((fat.PrecoMedio) * 1)} />}</DataTable.Cell>
-                                    <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.PrecoMedioKg) * 1)} />}%</DataTable.Cell>
-                                    <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.FaturamentoEC) * 1)} />}</DataTable.Cell>
-                                    <DataTable.Cell style={styles.colpequena}>{((fat.RepEC) * 100).toFixed(2)}%</DataTable.Cell>
-                                    <DataTable.Cell style={styles.colpequena}>{((fat.MargemEC) * 100).toFixed(2)}%</DataTable.Cell>
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            {nfatuTotais.map((fat, index) => (
+                                <DataTable.Row key={index} style={{ backgroundColor: '#E5E5EA' }}>
+                                    <DataTable.Cell style={styles.colgrande}>TOTAL</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.PAssFaturamento) * 1)} />}</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>{((fat.PAssMargem) * 100).toFixed(2)}%</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>{((fat.PAssRepTotal) * 100).toFixed(2)}%</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>-</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.PAssPrecoMedioKg) * 1)} />}</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colgrande}><MoneyPTBR number={((fat.PAssFaturamentoEC) * 1)} /></DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>{((fat.PAssRepEC) * 100).toFixed(2)}%</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>{((fat.PAssMargemEC) * 100).toFixed(2)}%</DataTable.Cell>
 
                                 </DataTable.Row>
                             ))}
-                    </ScrollView>
+                            {nfatuPerfSetor.sort((a, b) => (parseFloat(a.Faturamento) < parseFloat(b.Faturamento)) ? 1 : -1)
+                                .map((fat, index) => (
 
-                </DataTable>
-            </ScrollView>
+                                    <DataTable.Row key={index} style={{ backgroundColor: index % 2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>
+                                        <DataTable.Cell style={styles.colgrande}>
+                                            <TouchableOpacity onPress={() => { openGrupo(); nameSetor(fat.Setor) }} style={styles.btnModal}>
+                                                <Icon style={{ marginRight: 2, paddingTop: 3 }} name="ios-arrow-redo" size={14} color="#333" />
+                                                <Text style={{ color: '#333' }}>{fat.Setor}</Text>
+                                            </TouchableOpacity>
+                                        </DataTable.Cell>
+                                        <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.Faturamento) * 1)} />}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.colpequena}>{((fat.Margem) * 100).toFixed(2)}%</DataTable.Cell>
+                                        <DataTable.Cell style={styles.colpequena}>{((fat.RepTotal) * 100).toFixed(2)}%</DataTable.Cell>
+                                        <DataTable.Cell style={styles.colpequena}>{<MoneyPTBR number={((fat.PrecoMedio) * 1)} />}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.PrecoMedioKg) * 1)} />}%</DataTable.Cell>
+                                        <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((fat.FaturamentoEC) * 1)} />}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.colpequena}>{((fat.RepEC) * 100).toFixed(2)}%</DataTable.Cell>
+                                        <DataTable.Cell style={styles.colpequena}>{((fat.MargemEC) * 100).toFixed(2)}%</DataTable.Cell>
+
+                                    </DataTable.Row>
+                                ))}
+                        </ScrollView>
+
+                    </DataTable>
+                </ScrollView>
+            }
+
 
             <Modalize
                 ref={modalizeRef}

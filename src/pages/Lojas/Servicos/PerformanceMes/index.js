@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { DataTable } from 'react-native-paper';
@@ -8,37 +8,63 @@ import EP from './EP';
 import GE from './GE';
 import Mes from './Mes';
 import PP from './PP';
+import Loading from '../../../../components/Loading';
+import api from '../../../../services/api';
 
 export default function SPerformanceMes() {
 
-  const { serTotais } = useContext(AuthContext);
-  const sertotlojas = serTotais.map((tot) => (tot));
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false)
+  const [serTotais, setSerTotais] = useState([]);
+
+  // Extração de dados resumos totais
+  useEffect(() => {
+      async function getSerTotais() {
+        setLoading(true);
+        await api.get(`sertotais/${dtFormatada(dataFiltro)}`)
+          .then(sertotais => {
+            setSerTotais(sertotais.data);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+      getSerTotais();
+    }, [dataFiltro]);
 
   return (
     <View style={styles.container}>
+      {loading
+        ?
+        <Loading />
+        :
+        <Fragment>
+          <DataTable.Row style={styles.titleTable}>
+            <DataTable.Cell style={styles.titleText}>
+              <Text style={styles.titleText}>Performance Mês GE, PP, AP e EP</Text>
+            </DataTable.Cell>
+          </DataTable.Row>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View>
+              <Mes data={serTotais} />
+            </View>
+            <View>
+              <GE data={serTotais} />
+            </View>
+            <View>
+              <PP data={serTotais} />
+            </View>
+            <View>
+              <AP data={serTotais} />
+            </View>
+            <View>
+              <EP data={serTotais} />
+            </View>
+          </ScrollView>
+        </Fragment>
+      }
 
-      <DataTable.Row style={styles.titleTable}>
-        <DataTable.Cell style={styles.titleText}>
-          <Text style={styles.titleText}>Performance Mês GE, PP, AP e EP</Text>
-        </DataTable.Cell>
-      </DataTable.Row>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View>
-          <Mes data={sertotlojas} />
-        </View>
-        <View>
-          <GE data={sertotlojas} />
-        </View>
-        <View>
-          <PP data={sertotlojas} />
-        </View>
-        <View>
-          <AP data={sertotlojas} />
-        </View>
-        <View>
-          <EP data={sertotlojas} />
-        </View>
-      </ScrollView>
     </View>
   );
 }

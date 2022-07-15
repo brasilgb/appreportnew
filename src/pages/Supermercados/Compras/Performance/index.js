@@ -1,18 +1,44 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import Loading from '../../../../components/Loading';
 
 import { AuthContext } from '../../../../contexts/auth';
+import api from '../../../../services/api';
 export default function CPerformance() {
 
-  const { sComGrafico } = useContext(AuthContext);
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false)
+  const [sComGrafico, setSComGrafico] = useState([]);
+
+  useEffect(() => {
+
+    async function getSComGrafico() {
+      setLoading(true);
+      await api.get(`scomgrafico/${dtFormatada(dataFiltro)}`)
+        .then(scomgrafico => {
+          getSComGrafico(scomgrafico.data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+    getSComGrafico();
+
+  }, [dataFiltro]);
+
 
   return (
     <View style={styles.container}>
-
-      <ScrollView>
-        {/* Gráfico */}
-      </ScrollView>
+      {loading
+        ?
+        <Loading />
+        :
+        <ScrollView>
+          {/* Gráfico {sComGrafico} */}
+        </ScrollView>
+      }
 
     </View>
   );

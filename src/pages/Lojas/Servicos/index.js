@@ -1,19 +1,34 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import HeaderPage from '../../../components/Header/Page';
 import { BoxHome, TabContainer } from '../../style';
 import { AuthContext } from '../../../contexts/auth';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import moment from 'moment';
-
-const ServicoTab = createMaterialTopTabNavigator();
-
 import SCompDiario from './CompDiario';
 import SPerformance from './Performance';
 import SPerformanceDia from './PerformanceDia';
 import SPerformanceMes from './PerformanceMes';
+import api from '../../../services/api';
+const ServicoTab = createMaterialTopTabNavigator();
 
 export default function LServicos() {
-    const { serTotais } = useContext(AuthContext);
+    
+    const { dtFormatada, dataFiltro } = useContext(AuthContext);
+    const [serTotais, setSerTotais] = useState(0);
+
+    // Extração de dados resumos totais
+    useEffect(() => {
+            async function getSerTotais() {
+                await api.get(`sertotais/${dtFormatada(dataFiltro)}`)
+                    .then(sertotais => {
+                        setSerTotais(sertotais);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+            getSerTotais();
+        }, [dataFiltro]);
 
     return (
         <BoxHome>
@@ -23,7 +38,7 @@ export default function LServicos() {
                 textColor="#FFF"
                 title="Lojas Solar"
                 subTitle="Serviços"
-                dtatu={moment(serTotais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+                dtatu={moment(serTotais[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
             />
             <TabContainer>
                 <ServicoTab.Navigator

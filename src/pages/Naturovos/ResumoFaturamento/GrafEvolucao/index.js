@@ -1,49 +1,86 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { DataTable } from 'react-native-paper';
 import { AuthContext } from '../../../../contexts/auth';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
-import moment from 'moment';
+import Loading from '../../../../components/Loading';
+import api from '../../../../services/api';
 
 export default function GrafEvolucao() {
 
-  const { nResGrafico, nResTotal } = useContext(AuthContext);
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [nResGrafico, setNResGrafico] = useState([]);
+  const [nResTotal, setNResTotal] = useState([]);
+
+  // Extração de dados resumos totais
+  useEffect(() => {
+    async function getNResGrafico() {
+      setLoading(true);
+      await api.get(`nresgrafico/${dtFormatada(dataFiltro)}`)
+        .then(nresgrafico => {
+          setNResGrafico(nresgrafico);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+    getNResGrafico();
+
+    async function getNResTotal() {
+      setLoading(true);
+      await api.get(`nrestotais/${dtFormatada(dataFiltro)}`)
+        .then(nrestotais => {
+          setNResTotal(nrestotais.data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+    getNResTotal();
+
+  }, [dataFiltro]);
+
   return (
     <View style={styles.container}>
+      {loading
+        ?
+        <Loading />
+        :
+        <ScrollView>
 
-      <ScrollView>
+          {nResTotal.map((fatmes, index) => (
+            <DataTable key={index} style={{ marginBottom: 10 }}>
 
-        {nResTotal.map((fatmes, index) => (
-          <DataTable key={index} style={{ marginBottom: 10 }}>
+              <DataTable.Header style={styles.titleTable}>
+                <DataTable.Title><Text style={styles.titleText}>{fatmes.TituloProjecao}</Text></DataTable.Title>
+              </DataTable.Header>
 
-            <DataTable.Header style={styles.titleTable}>
-              <DataTable.Title><Text style={styles.titleText}>{fatmes.TituloProjecao}</Text></DataTable.Title>
-            </DataTable.Header>
+              <DataTable.Row>
+                <DataTable.Cell>{<MoneyPTBR number={((fatmes.ProjecaoFaturamento) * 1)} />}</DataTable.Cell>
+              </DataTable.Row>
 
-            <DataTable.Row>
-              <DataTable.Cell>{<MoneyPTBR number={((fatmes.ProjecaoFaturamento) * 1)} />}</DataTable.Cell>
-            </DataTable.Row>
+              <DataTable.Header style={styles.titleTable}>
+                <DataTable.Title><Text style={styles.titleText}>{fatmes.TituloDif}</Text></DataTable.Title>
+              </DataTable.Header>
+              <DataTable.Row>
+                <DataTable.Cell>{((fatmes.DifMesAntAtual) * 100).toFixed()}%</DataTable.Cell>
+              </DataTable.Row>
 
-            <DataTable.Header style={styles.titleTable}>
-              <DataTable.Title><Text style={styles.titleText}>{fatmes.TituloDif}</Text></DataTable.Title>
-            </DataTable.Header>
-            <DataTable.Row>
-              <DataTable.Cell>{((fatmes.DifMesAntAtual) * 100).toFixed()}%</DataTable.Cell>
-            </DataTable.Row>
+              <DataTable.Header style={styles.titleTable}>
+                <DataTable.Title><Text style={styles.titleText}>{fatmes.TituloGrafico}</Text></DataTable.Title>
+              </DataTable.Header>
+            </DataTable>
+          ))}
 
-            <DataTable.Header style={styles.titleTable}>
-              <DataTable.Title><Text style={styles.titleText}>{fatmes.TituloGrafico}</Text></DataTable.Title>
-            </DataTable.Header>
-          </DataTable>
-        ))}
+          {/* Gráfico {nResGrafico} */}
 
-         {/* Gráfico */}
-
-      </ScrollView>
-
-
+        </ScrollView>
+      }
 
     </View>
 

@@ -4,15 +4,14 @@ import { AuthContext } from '../contexts/auth';
 
 import AuthRoutes from './auth.routes';
 import AppRoutes from './app.routes';
+import Loading from '../components/Loading';
 
 function Routes(){
     const { signed, loading } = useContext(AuthContext);
 
     if(loading){
         return(
-            <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator size="large" color="#131313" />
-            </View>
+            <Loading/>
         )
     }
 

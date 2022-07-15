@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BoxHome, TabContainer } from '../../style';
 import HeaderPage from '../../../components/Header/Page';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -10,10 +10,28 @@ import Grupo from './Grupo';
 import Exportacao from './Exportacao';
 import moment from 'moment';
 import { AuthContext } from '../../../contexts/auth';
+import api from '../../../services/api';
 
 export default function NResumo() {
-    const { totais } = useContext(AuthContext);
-    const vtotal = totais.filter((dep) => (dep.Departamento === 5)).map(tot => tot);
+
+    const { dtFormatada, dataFiltro } = useContext(AuthContext);
+    const [totais, setTotais] = useState([]);
+
+    useEffect(() => {
+
+        async function getTotais() {
+            await api.get(`totais/${dtFormatada(dataFiltro)}`)
+                .then(totais => {
+                    const tot = totais.data.filter((dep) => (dep.Departamento === 5)); 
+                    setTotais(tot);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getTotais();
+    }, [dataFiltro]);
+
     return (
         <BoxHome>
             <HeaderPage
@@ -23,7 +41,7 @@ export default function NResumo() {
                 bgStatus="#F5AB00"
                 title="Naturovos"
                 subTitle="Resumo de Faturamento"
-                dtatu={moment(vtotal[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+                dtatu={moment(totais[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
             />
             <TabContainer>
                 <ResumoTab.Navigator

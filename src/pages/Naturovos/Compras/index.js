@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import HeaderPage from '../../../components/Header/Page';
 import { AuthContext } from '../../../contexts/auth';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import moment from 'moment';
-
+import api from '../../../services/api';
 const CompraTab = createMaterialTopTabNavigator();
 
 import CCompDiario from './CompDiario';
@@ -12,9 +12,23 @@ import CPerformanceAss from './PerformanceAss';
 import CPerformanceMes from './PerformanceMes';
 import { BoxHome, TabContainer } from '../../style';
 
-export default function LCompras() {
+export default function NCompras() {
 
-  const { comTotais } = useContext(AuthContext);
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [nComTotal, setNComTotal] = useState([]);
+
+  useEffect(() => {
+    async function getNComTotal() {
+        await api.get(`ncomtotal/${dtFormatada(dataFiltro)}`)
+            .then(comtotais => {
+              setNComTotal(comtotais.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+    getNComTotal();
+}, [dataFiltro]);
 
   return (
     <BoxHome>
@@ -25,7 +39,7 @@ export default function LCompras() {
         bgStatus="#F5AB00"
         title="Naturovos"
         subTitle="Compras"
-        dtatu={moment(comTotais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+        dtatu={moment(nComTotal[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
       />
 
       <TabContainer>

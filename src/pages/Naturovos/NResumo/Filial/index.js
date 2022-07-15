@@ -1,48 +1,90 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { DataTable } from 'react-native-paper';
+import Loading from '../../../../components/Loading';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
 import { AuthContext } from '../../../../contexts/auth';
+import api from '../../../../services/api';
 
 export default function Filial() {
 
-    const { filiais, totais } = useContext(AuthContext);
-    const vfilial = filiais.filter((fil) => (fil.Departamento === 5));
-    const vtotal = totais.filter((fl) => (fl.Departamento === 5));
+    const { dtFormatada, dataFiltro } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const [totais, setTotais] = useState([]);
+    const [filiais, setFiliais] = useState([]);
+
+    // Extração de dados resumos totais
+    useEffect(() => {
+        async function getFiliais() {
+            setLoading(true);
+            await api.get(`filiais/${dtFormatada(dataFiltro)}`)
+                .then(filiais => {
+                    const fil = filiais.data.filter((dep) => (dep.Departamento === 5));
+                    setFiliais(fil);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getFiliais();
+
+        async function getTotais() {
+            setLoading(true);
+            await api.get(`totais/${dtFormatada(dataFiltro)}`)
+                .then(totais => {
+                    const tot = totais.data.filter((dep) => (dep.Departamento === 5));
+                    setTotais(tot);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getTotais();
+
+    }, [dataFiltro]);
+
     return (
         <View style={styles.container}>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                <DataTable>
-                    <DataTable.Header style={{ backgroundColor: '#E5E5EA' }}>
-                        <DataTable.Title style={styles.colgrande}>Filial.</DataTable.Title>
-                        <DataTable.Title style={styles.colgrande}>Faturamento</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Rep.Fat</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Margem</DataTable.Title>
-                        <DataTable.Title style={styles.colpequena}>Preço Médio</DataTable.Title>
-                    </DataTable.Header>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        {vtotal.map((tot, index) => (
-                            <DataTable.Row key={index} style={{ backgroundColor: '#E5E5EA' }}>
-                                <DataTable.Cell style={styles.colgrande}>Total</DataTable.Cell>
-                                <DataTable.Cell style={styles.colgrande}><MoneyPTBR number={parseFloat(tot.Faturamento)} /></DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((1) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((tot.Margem) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}><MoneyPTBR number={parseFloat(tot.PrecoMedio)} /></DataTable.Cell>
-                            </DataTable.Row>
-                        ))}
-                        {vfilial.map((fil, index) => (
-                            <DataTable.Row key={index} style={{ backgroundColor:  index%2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>
-                                <DataTable.Cell style={styles.colgrande}>{fil.Filial}</DataTable.Cell>
-                                <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={parseFloat(fil.Faturamento)} />}</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fil.RepFaturamento) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{((fil.Margem) * 100).toFixed(2)}%</DataTable.Cell>
-                                <DataTable.Cell style={styles.colpequena}>{<MoneyPTBR number={parseFloat(fil.PrecoMedio)} />}</DataTable.Cell>
-                            </DataTable.Row>
-                        ))}
-                    </ScrollView>
-                </DataTable>
-            </ScrollView >
+            {loading
+                ?
+                <Loading />
+                :
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    <DataTable>
+                        <DataTable.Header style={{ backgroundColor: '#E5E5EA' }}>
+                            <DataTable.Title style={styles.colgrande}>Filial.</DataTable.Title>
+                            <DataTable.Title style={styles.colgrande}>Faturamento</DataTable.Title>
+                            <DataTable.Title style={styles.colpequena}>Rep.Fat</DataTable.Title>
+                            <DataTable.Title style={styles.colpequena}>Margem</DataTable.Title>
+                            <DataTable.Title style={styles.colpequena}>Preço Médio</DataTable.Title>
+                        </DataTable.Header>
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            {totais.map((tot, index) => (
+                                <DataTable.Row key={index} style={{ backgroundColor: '#E5E5EA' }}>
+                                    <DataTable.Cell style={styles.colgrande}>Total</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colgrande}><MoneyPTBR number={parseFloat(tot.Faturamento)} /></DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>{((1) * 100).toFixed(2)}%</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>{((tot.Margem) * 100).toFixed(2)}%</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}><MoneyPTBR number={parseFloat(tot.PrecoMedio)} /></DataTable.Cell>
+                                </DataTable.Row>
+                            ))}
+                            {filiais.map((fil, index) => (
+                                <DataTable.Row key={index} style={{ backgroundColor: index % 2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>
+                                    <DataTable.Cell style={styles.colgrande}>{fil.Filial}</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={parseFloat(fil.Faturamento)} />}</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>{((fil.RepFaturamento) * 100).toFixed(2)}%</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>{((fil.Margem) * 100).toFixed(2)}%</DataTable.Cell>
+                                    <DataTable.Cell style={styles.colpequena}>{<MoneyPTBR number={parseFloat(fil.PrecoMedio)} />}</DataTable.Cell>
+                                </DataTable.Row>
+                            ))}
+                        </ScrollView>
+                    </DataTable>
+                </ScrollView >
+            }
+
         </View>
     );
 }

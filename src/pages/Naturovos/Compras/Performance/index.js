@@ -1,12 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { AuthContext } from '../../../../contexts/auth';
+import api from '../../../../services/api';
 export default function CPerformance() {
-
-  const { nComGrafico } = useContext(AuthContext);
   
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [nComGrafico, setNComGrafico] = useState([]);
+
+  useEffect(() => {
+    async function getNfatuGrafico() {
+        await api.get(`nfatugrafico/${dtFormatada(dataFiltro)}`)
+            .then(nfatugrafico => {
+              setNComGrafico(nfatugrafico.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+    getNfatuGrafico();
+}, [dataFiltro]);
+
   return (
     <View style={styles.container}>
 

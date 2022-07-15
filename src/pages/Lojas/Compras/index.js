@@ -1,20 +1,35 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import HeaderPage from '../../../components/Header/Page';
 import { AuthContext } from '../../../contexts/auth';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import moment from 'moment';
-
-const CompraTab = createMaterialTopTabNavigator();
-
 import CCompDiario from './CompDiario';
 import CPerformance from './Performance';
 import CPerformanceAss from './PerformanceAss';
 import CPerformanceMes from './PerformanceMes';
 import { BoxHome, TabContainer } from '../../style';
+import api from '../../../services/api';
+
+const CompraTab = createMaterialTopTabNavigator();
 
 export default function LCompras() {
 
-  const { comTotais } = useContext(AuthContext);
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [comTotais, setComTotais] = useState([]);
+
+  // Extração de dados resumos totais
+  useEffect(() => {
+          async function getComTotais() {
+              await api.get(`comtotais/${dtFormatada(dataFiltro)}`)
+                  .then(comtotais => {
+                    setComTotais(comtotais.data);
+                  })
+                  .catch(err => {
+                      console.log(err);
+                  })
+          }
+          getComTotais();
+      }, [dataFiltro]);
 
   return (
     <BoxHome>
@@ -24,7 +39,7 @@ export default function LCompras() {
         textColor="#FFF"
         title="Lojas Solar"
         subTitle="Compras"
-        dtatu={moment(comTotais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+        dtatu={moment(comTotais[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
       />
 
       <TabContainer>

@@ -6,32 +6,37 @@ import { AreaUm, BoxHome, ButtonArea, ContainerText, GraphArea, ScreenArea } fro
 import { AuthContext } from '../../contexts/auth';
 import MoneyPTBR from '../../components/MoneyPTBR';
 import CircularProgress from 'react-native-circular-progress-indicator';
-import { Text } from 'react-native';
+import api from '../../services/api';
+import Loading from '../../components/Loading';
 
 export default function Lojas() {
 
-  const { user, totais } = useContext(AuthContext);
-  const vtotal = totais.filter((dep) => (dep.Departamento === 1));
-console.log(vtotal)
+  const { dtFormatada, dataFiltro } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false)
+  const [totais, setTotais] = useState([]);
+
+  // Extração de dados resumos totais
+  useEffect(() => {
+    async function getTotais() {
+      setLoading(true)
+      await api.get(`totais/${dtFormatada(dataFiltro)}`)
+        .then(totais => {
+          const tot = totais.data.filter((dep) => (dep.Departamento === 1));
+          setTotais(tot);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+    getTotais();
+  }, [dataFiltro]);
+
   const colorValid = ((value) => {
     if (value <= 90) return "#DC2626";
     if (value <= 98) return "#F18800";
     if (value > 90) return "#10B981";
   });
-
-  const [metaAlc, setMetaAlc] = useState(0);
-  const [margem, setMargem] = useState(0);
-  const [projecao, setProjecao] = useState(0);
-
-  const vmetaalcancada = (vtotal[0].MetaAlcancada) * 100;
-  const vmargem = (vtotal[0].Margem) * 100;
-  const vprojecao = (vtotal[0].Projecao) * 100;
-
-  useEffect(() => {
-    setMetaAlc(vmetaalcancada);
-    setMargem(vmargem);
-    setProjecao(vprojecao);
-  }, [vmetaalcancada, vmargem, vprojecao])
 
   return (
     <BoxHome>
@@ -43,88 +48,91 @@ console.log(vtotal)
         barStyle="light-content"
         title="Lojas Solar"
         subTitle="Relatório de Faturamento"
-        dtatu={moment(totais[0].Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
+        dtatu={moment(totais[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
       />
       <ScreenArea>
+        {loading
+          ?
+          <Loading />
+          : 
+          <GraphArea>
+            <AreaUm height="70px" paddingTop="">
+              <ContainerText>
+                <ContainerText.Title color="#0e98e5">Meta</ContainerText.Title>
+                <ContainerText.Value color="#0e98e5"> <MoneyPTBR number={totais[0]?.Meta ? totais[0]?.Meta : 0} /> </ContainerText.Value>
+              </ContainerText>
+              <ContainerText>
+                <ContainerText.Title color={colorValid(totais[0]?.MetaAlcancada)}>Faturamento</ContainerText.Title>
+                <ContainerText.Value color={colorValid(totais[0]?.MetaAlcancada)}> <MoneyPTBR number={parseFloat(totais[0]?.Faturamento ? totais[0]?.Faturamento : 0)} /> </ContainerText.Value>
+              </ContainerText>
+            </AreaUm>
+ 
+            <AreaUm height="120px" paddingTop="45px">
+              <CircularProgress
+                value={totais[0]?.MetaAlcancada ? (totais[0]?.MetaAlcancada) * 100 : 0}
+                radius={65}
+                duration={2000}
+                inActiveStrokeOpacity={0.4}
+                progressValueColor={colorValid(totais[0]?.MetaAlcancada)}
+                activeStrokeColor={colorValid(totais[0]?.MetaAlcancada)}
+                activeStrokeWidth={10}
+                inActiveStrokeWidth={10}
+                maxValue={100}
+                title={'Meta'}
+                titleColor={colorValid(totais[0]?.MetaAlcancada)}
+                titleFontSize={12}
+                progressValueFontSize={30}
+                titleStyle={{ fontWeight: 'bold' }}
+                valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+                valueSuffix={'%'}
+              />
 
-        <GraphArea>
-          <AreaUm height="70px" paddingTop="">
-            <ContainerText>
-              <ContainerText.Title color="#0e98e5">Meta</ContainerText.Title>
-              <ContainerText.Value color="#0e98e5"> <MoneyPTBR number={vtotal[0].Meta} /> </ContainerText.Value>
-            </ContainerText>
-            <ContainerText>
-              <ContainerText.Title color={colorValid(vtotal[0].MetaAlcancada)}>Faturamento</ContainerText.Title>
-              <ContainerText.Value color={colorValid(vtotal[0].MetaAlcancada)}> <MoneyPTBR number={parseFloat(vtotal[0].Faturamento)} /> </ContainerText.Value>
-            </ContainerText>
-          </AreaUm>
-          <AreaUm><Text>Textohsxhsxhsxasxh</Text></AreaUm>
+            </AreaUm>
+            <AreaUm paddingTop="55px">
 
-          <AreaUm height="120px" paddingTop="45px">
+              <CircularProgress
+                value={totais[0]?.Margem ? (totais[0]?.Margem) * 100 : 0}
+                radius={65}
+                duration={2000}
+                inActiveStrokeOpacity={0.4}
+                progressValueColor={colorValid(totais[0]?.Margem)}
+                activeStrokeColor={colorValid(totais[0]?.Margem)}
+                activeStrokeWidth={10}
+                inActiveStrokeWidth={10}
+                maxValue={100}
+                title={'Margem'}
+                titleColor={colorValid(totais[0]?.Margem)}
+                titleFontSize={12}
+                progressValueFontSize={30}
+                titleStyle={{ fontWeight: 'bold' }}
+                valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+                valueSuffix={'%'}
+              />
 
-            <CircularProgress
-              value={metaAlc}
-              radius={65}
-              duration={2000}
-              inActiveStrokeOpacity={0.4}
-              progressValueColor={colorValid(metaAlc)}
-              activeStrokeColor={colorValid(metaAlc)}
-              activeStrokeWidth={10}
-              inActiveStrokeWidth={10}
-              maxValue={100}
-              title={'Meta'}
-              titleColor={colorValid(metaAlc)}
-              titleFontSize={12}
-              progressValueFontSize={30}
-              titleStyle={{ fontWeight: 'bold' }}
-              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
-              valueSuffix={'%'}
-            />
+              <CircularProgress
+                value={totais[0]?.Projecao ? (totais[0]?.Projecao) * 100 : 0}
+                radius={65}
+                duration={2000}
+                inActiveStrokeOpacity={0.4}
+                progressValueColor={colorValid(totais[0]?.Projecao)}
+                activeStrokeColor={colorValid(totais[0]?.Projecao)}
+                activeStrokeWidth={10}
+                inActiveStrokeWidth={10}
+                maxValue={100}
+                title={'Projeção'}
+                titleColor={colorValid(totais[0]?.Projecao)}
+                titleFontSize={12}
+                progressValueFontSize={30}
+                titleStyle={{ fontWeight: 'bold' }}
+                valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+                valueSuffix={'%'}
+              />
 
-          </AreaUm>
-          <AreaUm paddingTop="55px">
+            </AreaUm>
 
-            <CircularProgress
-              value={margem}
-              radius={65}
-              duration={2000}
-              inActiveStrokeOpacity={0.4}
-              progressValueColor={colorValid(margem)}
-              activeStrokeColor={colorValid(margem)}
-              activeStrokeWidth={10}
-              inActiveStrokeWidth={10}
-              maxValue={100}
-              title={'Margem'}
-              titleColor={colorValid(margem)}
-              titleFontSize={12}
-              progressValueFontSize={30}
-              titleStyle={{ fontWeight: 'bold' }}
-              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
-              valueSuffix={'%'}
-            />
+          </GraphArea>
+        }
 
-            <CircularProgress
-              value={projecao}
-              radius={65}
-              duration={2000}
-              inActiveStrokeOpacity={0.4}
-              progressValueColor={colorValid(projecao)}
-              activeStrokeColor={colorValid(projecao)}
-              activeStrokeWidth={10}
-              inActiveStrokeWidth={10}
-              maxValue={100}
-              title={'Projeção'}
-              titleColor={colorValid(projecao)}
-              titleFontSize={12}
-              progressValueFontSize={30}
-              titleStyle={{ fontWeight: 'bold' }}
-              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
-              valueSuffix={'%'}
-            />
-
-          </AreaUm>
-
-        </GraphArea>
         <ButtonArea>
           <BoxButtom>
 

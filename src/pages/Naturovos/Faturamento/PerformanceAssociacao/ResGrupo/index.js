@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import MoneyPTBR from '../../../../../components/MoneyPTBR';
@@ -7,15 +7,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ResAssoc from '../ResAssoc';
+import api from '../../../../../services/api';
 
 export default function ResGrupo({ setorName, nfatuPerfGrupo }) {
 
     const { width, height } = Dimensions.get('screen');
     const modalizeRef = useRef(null);
 
-    const {
-        nfatuPerfAssoc,
-    } = useContext(AuthContext);
+    const { dtFormatada, dataFiltro } = useContext(AuthContext);
+    const [nfatuPerfAssoc, setNfatuPerfAssoc] = useState([]);
 
     const [grupoName, setGrupoName] = useState('');
 
@@ -25,8 +25,22 @@ export default function ResGrupo({ setorName, nfatuPerfGrupo }) {
 
     const nameGrupo = (setor) => {
         setGrupoName(setor);
+
     };
 
+    useEffect(() => {
+            async function getNfatuPerfAssoc() {
+                await api.get(`nfatuperfassoc/${dtFormatada(dataFiltro)}`)
+                    .then(nfatuperfassoc => {
+                        setNfatuPerfAssoc(nfatuperfassoc.data);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+            getNfatuPerfAssoc();
+        }, [dataFiltro]);
+        
     return (
 
         <View style={styles.container}>
