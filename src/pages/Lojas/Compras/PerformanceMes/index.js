@@ -47,12 +47,12 @@ export default function CPerformanceMes() {
     <View style={styles.container}>
       {loading
         ?
-        <Loading />
+        <Loading color="#0A3B7E"/>
         :
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <DataTable>
             <DataTable.Header style={{ backgroundColor: '#eee' }}>
-              <DataTable.Title style={styles.colmedia}>Mês/Ano.</DataTable.Title>
+              <DataTable.Title style={styles.colpequena}>Mês/Ano.</DataTable.Title>
               <DataTable.Title style={styles.colmedia}>Média Compras</DataTable.Title>
               <DataTable.Title style={styles.colpequena}>Rep.</DataTable.Title>
               <DataTable.Title style={styles.colpequena}>Prazo Médio</DataTable.Title>
@@ -61,7 +61,7 @@ export default function CPerformanceMes() {
             <ScrollView showsVerticalScrollIndicator={false}>
               {comTotais.map((tot, index) => (
                 <DataTable.Row key={index} style={{ backgroundColor: '#f1f1f1' }}>
-                  <DataTable.Cell style={styles.colmedia}>TOTAL</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>TOTAL</DataTable.Cell>
                   <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.MediaCompraMes) * 1)} />}</DataTable.Cell>
                   <DataTable.Cell style={styles.colpequena}>{((tot.RepMes) * 100).toFixed(2)}%</DataTable.Cell>
                   <DataTable.Cell style={styles.colpequena}>{parseInt(tot.PrazoMedioMes)}</DataTable.Cell>
@@ -69,7 +69,7 @@ export default function CPerformanceMes() {
               ))}
               {comPerfMes.map((fat, index) => (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell style={styles.colmedia}>{fat.MesAno}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>{fat.MesAno}</DataTable.Cell>
                   <DataTable.Cell style={styles.colmedia}>
                     <Text
                       style={((fat.MediaCompra) * 1) > ((fat.ColorMedia) * 1) ? { color: 'green' } : { color: 'red' }}

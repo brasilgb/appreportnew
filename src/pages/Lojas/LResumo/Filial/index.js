@@ -50,7 +50,7 @@ export default function Filial() {
         <View style={styles.container}>
             {loading
                 ?
-                <Loading />
+                <Loading color="#0A3B7E"/>
                 :
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     <DataTable>
@@ -74,7 +74,9 @@ export default function Filial() {
                                     <DataTable.Cell style={styles.colpequena}>{((tot.MetaAlcancada) * 100).toFixed(2)}%</DataTable.Cell>
                                 </DataTable.Row>
                             ))}
-                            {filiais.map((fil, index) => (
+                            {filiais
+                            .sort((a, b) => parseInt(a.Faturamento) < parseInt(b.Faturamento) ? 1 : -1)
+                            .map((fil, index) => (
                                 <DataTable.Row key={index} style={{ backgroundColor: index % 2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>
                                     <DataTable.Cell style={styles.colgrande}>{fil.Filial}</DataTable.Cell>
                                     <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={parseFloat(fil.Faturamento)} />}</DataTable.Cell>

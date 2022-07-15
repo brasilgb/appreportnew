@@ -5,6 +5,7 @@ import MoneyPTBR from '../../../../../components/MoneyPTBR';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ResGrupo({ grupoName, nfatuAssoc }) {
+
     return (
         <View style={styles.container}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -32,7 +33,7 @@ export default function ResGrupo({ grupoName, nfatuAssoc }) {
 
                     <ScrollView showsVerticalScrollIndicator={false}>
 
-                        {nfatuAssoc.filter((filg) => (filg.Grupo === grupoName))
+                        {nfatuAssoc.filter((filg) => (filg.Grupo == grupoName))
                             .sort((a, b) => (parseFloat(a.VendaMes) < parseFloat(b.VendaMes)) ? 1 : -1)
                             .map((fat, index) => (
 

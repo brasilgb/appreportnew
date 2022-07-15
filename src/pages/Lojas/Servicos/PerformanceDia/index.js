@@ -52,7 +52,7 @@ export default function SPerformanceDia() {
     <View style={styles.container}>
       {loading
         ?
-        <Loading />
+        <Loading color="#0A3B7E"/>
         :
         <Fragment>
           <DataTable.Row style={styles.titleTable}>

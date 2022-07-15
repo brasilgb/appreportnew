@@ -85,7 +85,7 @@ export default function ResumoDiario() {
                         <DataTable.Header style={{ backgroundColor: '#E5E5EA' }}>
                             <DataTable.Title style={styles.colgrande}>Setor</DataTable.Title>
 
-                            <DataTable.Title style={styles.colmedia}>Venda Dia</DataTable.Title>
+                            <DataTable.Title style={styles.colmedia}>Venda Dia {nfatuTotais[0]?.DiaAtual}</DataTable.Title>
                             <DataTable.Title style={styles.colpequena}>Margem</DataTable.Title>
 
                             <DataTable.Title style={styles.colmedia}>Venda Semana</DataTable.Title>
@@ -182,7 +182,7 @@ export default function ResumoDiario() {
                 snapPoint={height / 1.8}
                 modalHeight={height / 1.8}
             >
-                <ResGrupo setorName={setorName} nfatuGrupo={nfatuGrupo} nfatuTotais={nfatuTotais} />
+                <ResGrupo setorName={setorName} nfatuGrupo={nfatuGrupo} />
 
             </Modalize>
         </View>

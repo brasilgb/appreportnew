@@ -53,7 +53,7 @@ export default function Lojas() {
       <ScreenArea>
         {loading
           ?
-          <Loading />
+          <Loading color="#0A3B7E"/>
           : 
           <GraphArea>
             <AreaUm height="70px" paddingTop="">

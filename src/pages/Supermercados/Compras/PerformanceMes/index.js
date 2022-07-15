@@ -76,9 +76,9 @@ export default function CPerformanceMes() {
                     <DataTable.Cell style={styles.colmedia}>{fat.MesAno}</DataTable.Cell>
                     <DataTable.Cell style={styles.colmedia}>
                       <Text
-                        style={((fat.MediaCompra) * 1) < ((sComTotais[0].MediaCompraPerfMes) * 1) ? { color: 'green' } : { color: 'red' }}
+                        style={((fat.MediaCompra) * 1) < ((sComTotais[0]?.MediaCompraPerfMes) * 1) ? { color: 'green' } : { color: 'red' }}
                       >
-                        {<MoneyPTBR number={((fat.MediaCompra) * 1)} />}
+                        {<MoneyPTBR number={((fat.MediaCompra) * 1)} /> }
                       </Text>
                     </DataTable.Cell>
                     <DataTable.Cell style={styles.colpequena}>{((fat.Rep) * 100).toFixed(2)}%</DataTable.Cell>

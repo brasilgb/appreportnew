@@ -51,74 +51,74 @@ export default function Naturovos() {
         dtatu={moment(totais[0]?.Atualizacao).format('DD/MM/YYYY HH:mm:ss')}
       />
       <ScreenArea>
-      {loading
+        {loading
           ?
           <Loading />
-          : 
-        <GraphArea>
-          <AreaUm height="70px" paddingTop="">
-            <ContainerText>
-              <ContainerText.Title color="#0e98e5">Meta</ContainerText.Title>
-              <ContainerText.Value color="#0e98e5"> <MoneyPTBR number={totais[0]?.Meta ? totais[0]?.Meta : 0} /> </ContainerText.Value>
-            </ContainerText>
-            <ContainerText>
-              <ContainerText.Title color={colorValid(totais[0]?.MetaAlcancada)}>Faturamento</ContainerText.Title>
-              <ContainerText.Value color={colorValid(totais[0]?.MetaAlcancada)}> <MoneyPTBR number={parseFloat(totais[0]?.Faturamento ? totais[0]?.Faturamento : 0)} /> </ContainerText.Value>
-            </ContainerText>
-          </AreaUm>
+          :
+          <GraphArea>
+            <AreaUm height="70px" paddingTop="">
+              <ContainerText>
+                <ContainerText.Title color="#0e98e5">Meta</ContainerText.Title>
+                <ContainerText.Value color="#0e98e5"> <MoneyPTBR number={totais[0]?.Meta ? (totais[0]?.Meta) * 1 : 0} /> </ContainerText.Value>
+              </ContainerText>
+              <ContainerText>
+                <ContainerText.Title color={colorValid(totais[0]?.MetaAlcancada)}>Faturamento</ContainerText.Title>
+                <ContainerText.Value color={colorValid(totais[0]?.MetaAlcancada)}> <MoneyPTBR number={parseFloat(totais[0]?.Faturamento ? totais[0]?.Faturamento : 0)} /> </ContainerText.Value>
+              </ContainerText>
+            </AreaUm>
 
-          <AreaUm height="120px" paddingTop="40px">
-            <ContainerText>
-              <ContainerText.Title color="#555" style={{ fontSize: 18 }}>Preço Médio</ContainerText.Title>
-              <ContainerText.Value color="#555" style={{ fontSize: 40, fontWeight: 'bold' }}> <MoneyPTBR number={parseFloat(totais[0]?.PrecoMedio ? totais[0]?.PrecoMedio :0)} /> </ContainerText.Value>
-            </ContainerText>
+            <AreaUm height="120px" paddingTop="40px">
+              <ContainerText>
+                <ContainerText.Title color="#555" style={{ fontSize: 18 }}>Preço Médio</ContainerText.Title>
+                <ContainerText.Value color="#555" style={{ fontSize: 40, fontWeight: 'bold' }}> <MoneyPTBR number={parseFloat(totais[0]?.PrecoMedio ? totais[0]?.PrecoMedio : 0)} /> </ContainerText.Value>
+              </ContainerText>
 
-          </AreaUm>
+            </AreaUm>
 
-          <AreaUm paddingTop="45px">
+            <AreaUm paddingTop="45px">
 
-          <CircularProgress
-              value={totais[0]?.Margem ? (totais[0]?.Margem) * 100 : 0}
-              radius={65}
-              duration={2000}
-              inActiveStrokeOpacity={0.4}
-              progressValueColor={colorValid(totais[0]?.Margem)}
-              activeStrokeColor={colorValid(totais[0]?.Margem)}
-              activeStrokeWidth={10}
-              inActiveStrokeWidth={10}
-              maxValue={100}
-              title={'Margem'}
-              titleColor={colorValid(totais[0]?.Margem)}
-              titleFontSize={12}
-              progressValueFontSize={30}
-              titleStyle={{ fontWeight: 'bold' }}
-              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
-              valueSuffix={'%'}
-            />
+              <CircularProgress
+                value={totais[0]?.Margem ? (totais[0]?.Margem) * 100 : 0}
+                radius={65}
+                duration={2000}
+                inActiveStrokeOpacity={0.4}
+                progressValueColor={colorValid(totais[0]?.Margem)}
+                activeStrokeColor={colorValid(totais[0]?.Margem)}
+                activeStrokeWidth={10}
+                inActiveStrokeWidth={10}
+                maxValue={100}
+                title={'Margem'}
+                titleColor={colorValid(totais[0]?.Margem)}
+                titleFontSize={12}
+                progressValueFontSize={30}
+                titleStyle={{ fontWeight: 'bold' }}
+                valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+                valueSuffix={'%'}
+              />
 
-            <CircularProgress
-              value={totais[0]?.Projecao ? (totais[0]?.Projecao) * 100 : 0}
-              radius={65}
-              duration={2000}
-              inActiveStrokeOpacity={0.4}
-              progressValueColor={colorValid(totais[0]?.Projecao)}
-              activeStrokeColor={colorValid(totais[0]?.Projecao)}
-              activeStrokeWidth={10}
-              inActiveStrokeWidth={10}
-              maxValue={100}
-              title={'Projeção'}
-              titleColor={colorValid(totais[0]?.Projecao)}
-              titleFontSize={12}
-              progressValueFontSize={30}
-              titleStyle={{ fontWeight: 'bold' }}
-              valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
-              valueSuffix={'%'}
-            />
+              <CircularProgress
+                value={totais[0]?.Projecao ? (totais[0]?.Projecao) * 100 : 0}
+                radius={65}
+                duration={2000}
+                inActiveStrokeOpacity={0.4}
+                progressValueColor={colorValid(totais[0]?.Projecao)}
+                activeStrokeColor={colorValid(totais[0]?.Projecao)}
+                activeStrokeWidth={10}
+                inActiveStrokeWidth={10}
+                maxValue={100}
+                title={'Projeção'}
+                titleColor={colorValid(totais[0]?.Projecao)}
+                titleFontSize={12}
+                progressValueFontSize={30}
+                titleStyle={{ fontWeight: 'bold' }}
+                valueSuffixStyle={{ fontWeight: 'normal', position: 'absolute', top: 10, right: -18 }}
+                valueSuffix={'%'}
+              />
 
-          </AreaUm>
+            </AreaUm>
 
-        </GraphArea>
-}
+          </GraphArea>
+        }
         <ButtonArea>
 
           <BoxButtom>

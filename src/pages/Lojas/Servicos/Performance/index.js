@@ -47,7 +47,7 @@ export default function PerformanceMes() {
     <View style={styles.container}>
       {loading
         ?
-        <Loading />
+        <Loading color="#0A3B7E"/>
         :
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <DataTable>
@@ -83,7 +83,9 @@ export default function PerformanceMes() {
                   <DataTable.Cell style={styles.colpequena}>{((tot.PerfRepEP) * 100).toFixed(2)}%</DataTable.Cell>
                 </DataTable.Row>
               ))}
-              {serPerform.map((mes, index) => (
+              {serPerform
+              .sort((a, b) => parseInt(a.AnoMesNum) < parseInt(b.AnoMesNum) ? 1 : -1)
+              .map((mes, index) => (
                 <DataTable.Row key={index}>
                   <DataTable.Cell style={styles.colpequena}>{mes.PerfMesAno}</DataTable.Cell>
                   <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((mes.PerfValorGE) * 1)} />}</DataTable.Cell>

@@ -47,7 +47,7 @@ export default function PerformanceAssociacao() {
     <View style={styles.container}>
       {loading
         ?
-        <Loading />
+        <Loading color="#0A3B7E"/>
         :
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <DataTable>
@@ -79,7 +79,9 @@ export default function PerformanceAssociacao() {
                   <DataTable.Cell style={styles.colpequena}>{((tot.RepEstoqueAss) * 100).toFixed(2)}%</DataTable.Cell>
                 </DataTable.Row>
               ))}
-              {fatuPerfAssocLojas.map((ass, index) => (
+              {fatuPerfAssocLojas
+              .sort((a, b) => parseInt(a.Faturamento) < parseInt(b.Faturamento) ? 1 : -1)
+              .map((ass, index) => (
                 <DataTable.Row key={index}>
                   <DataTable.Cell style={styles.colpequena}>{ass.Assoc}</DataTable.Cell>
                   <DataTable.Cell style={styles.colgrande}>{<MoneyPTBR number={((ass.Faturamento) * 1)} />}</DataTable.Cell>

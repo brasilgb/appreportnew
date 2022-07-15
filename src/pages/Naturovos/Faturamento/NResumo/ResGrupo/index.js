@@ -10,6 +10,7 @@ import ResAssoc from '../ResAssoc';
 import api from '../../../../../services/api';
 
 export default function ResGrupo({ setorName, nfatuGrupo }) {
+
     const { width, height } = Dimensions.get('screen');
     const modalizeRef = useRef(null);
 
@@ -29,18 +30,18 @@ export default function ResGrupo({ setorName, nfatuGrupo }) {
 
     // Extração de dados resumos totais
     useEffect(() => {
-            async function getNfatuAssoc() {
-                await api.get(`nfatuassoc/${dtFormatada(dataFiltro)}`)
-                    .then(nfatuassoc => {
-                        setNfatuAssoc(nfatuassoc.data);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            }
-            getNfatuAssoc();
-        }, [dataFiltro]);
-        
+        async function getNfatuAssoc() {
+            await api.get(`nfatuassoc/${dtFormatada(dataFiltro)}`)
+                .then(nfatuassoc => {
+                    setNfatuAssoc(nfatuassoc.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getNfatuAssoc();
+    }, [dataFiltro]);
+
     return (
 
         <View style={styles.container}>
@@ -75,9 +76,9 @@ export default function ResGrupo({ setorName, nfatuGrupo }) {
 
                                 <DataTable.Row key={index} style={{ backgroundColor: index % 2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>
                                     <DataTable.Cell style={styles.colgrande}>
-                                        <TouchableOpacity onPress={() => { openAssoc(); nameGrupo(fat.Grupo) }}  style={styles.btnModal} >
+                                        <TouchableOpacity onPress={() => { openAssoc(); nameGrupo(fat.Grupo) }} style={styles.btnModal} >
                                             <Icon style={{ marginRight: 2, paddingTop: 3 }} name="ios-arrow-redo" size={14} color="#333" />
-                                            <Text style={{color: '#333'}}>{fat.Grupo}</Text>
+                                            <Text style={{ color: '#333' }}>{fat.Grupo}</Text>
                                         </TouchableOpacity>
 
                                     </DataTable.Cell>
@@ -117,8 +118,6 @@ export default function ResGrupo({ setorName, nfatuGrupo }) {
 
                 </DataTable>
             </ScrollView>
-
-
 
             <Modalize
                 ref={modalizeRef}

@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
 import api from '../../../../services/api';
 import Loading from '../../../../components/Loading';
+import { parse } from 'react-native-svg';
 
 export default function CPerformanceAss() {
 
@@ -49,12 +50,12 @@ export default function CPerformanceAss() {
     <View style={styles.container}>
       {loading
         ?
-        <Loading />
+        <Loading color="#0A3B7E"/>
         :
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <DataTable>
             <DataTable.Header style={{ backgroundColor: '#eee' }}>
-              <DataTable.Title style={styles.colmedia}>Ass.</DataTable.Title>
+              <DataTable.Title style={styles.colpequena}>Ass.</DataTable.Title>
               <DataTable.Title style={styles.colmedia}>Compras</DataTable.Title>
               <DataTable.Title style={styles.colpequena}>Rep.</DataTable.Title>
               <DataTable.Title style={styles.colpequena}>Prazo Médio</DataTable.Title>
@@ -63,15 +64,17 @@ export default function CPerformanceAss() {
             <ScrollView showsVerticalScrollIndicator={false}>
               {comTotais.map((tot, index) => (
                 <DataTable.Row key={index} style={{ backgroundColor: '#f1f1f1' }}>
-                  <DataTable.Cell style={styles.colmedia}>TOTAL</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>TOTAL</DataTable.Cell>
                   <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.ComprasAssoc) * 1)} />}</DataTable.Cell>
                   <DataTable.Cell style={styles.colpequena}>{((tot.RepAssoc) * 100).toFixed(2)}%</DataTable.Cell>
                   <DataTable.Cell style={styles.colpequena}>{parseInt(tot.PrazoMedioAssoc)}</DataTable.Cell>
                 </DataTable.Row>
               ))}
-              {comPerfAssoc.map((fat, index) => (
+              {comPerfAssoc
+              .sort((a, b) => parseInt(a.Compras) < parseInt(b.Compras) ? 1 : -1)
+              .map((fat, index) => (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell style={styles.colmedia}>{fat.Assoc}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>{fat.Assoc}</DataTable.Cell>
                   <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((fat.Compras) * 1)} />}</DataTable.Cell>
                   <DataTable.Cell style={styles.colpequena}>{((fat.Rep) * 100).toFixed(2)}%</DataTable.Cell>
                   <DataTable.Cell style={styles.colpequena}>{parseInt(fat.PrazoMedio)}</DataTable.Cell>

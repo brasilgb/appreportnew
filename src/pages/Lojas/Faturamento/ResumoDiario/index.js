@@ -17,39 +17,39 @@ export default function ResumoDiario() {
 
     // Extração de dados resumos totais
     useEffect(() => {
-            async function getFatuLojas() {
-                setLoading(true);
-                await api.get(`fatulojas/${dtFormatada(dataFiltro)}`)
-                    .then(fatulojas => {
-                        setFatuLojas(fatulojas.data);
-                        setLoading(false);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            }
-            getFatuLojas();
+        async function getFatuLojas() {
+            setLoading(true);
+            await api.get(`fatulojas/${dtFormatada(dataFiltro)}`)
+                .then(fatulojas => {
+                    setFatuLojas(fatulojas.data);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getFatuLojas();
 
-            async function getFatuTotLojas() {
-                setLoading(true);
-                await api.get(`fatutotlojas/${dtFormatada(dataFiltro)}`)
-                    .then(fatutotlojas => {
-                        setFatuTotLojas(fatutotlojas.data);
-                        setLoading(false);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            }
-            getFatuTotLojas();
+        async function getFatuTotLojas() {
+            setLoading(true);
+            await api.get(`fatutotlojas/${dtFormatada(dataFiltro)}`)
+                .then(fatutotlojas => {
+                    setFatuTotLojas(fatutotlojas.data);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getFatuTotLojas();
 
-        }, [dataFiltro]);
+    }, [dataFiltro]);
 
     return (
         <View style={styles.container}>
             {loading
                 ?
-                <Loading />
+                <Loading color="#0A3B7E" />
                 :
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     <DataTable>
@@ -89,7 +89,8 @@ export default function ResumoDiario() {
                                     <DataTable.Cell style={styles.colpequena}>{((fat.RepSemFatu) * 100).toFixed(2)}%</DataTable.Cell>
                                 </DataTable.Row>
                             ))}
-                            {fatuLojas.sort((a, b) => (parseFloat(a.FatuDia) < parseFloat(b.FatuDia)) ? 1 : -1)
+                            {fatuLojas
+                                .sort((a, b) => (parseFloat(a.FatuMes) < parseFloat(b.FatuMes)) ? 1 : -1)
                                 .map((fat, index) => (
                                     <DataTable.Row key={index} style={{ backgroundColor: index % 2 === 0 ? '#F3F4F6' : '#F9FAFB' }}>
                                         <DataTable.Cell style={styles.colpequena}>{fat.Associacao}</DataTable.Cell>

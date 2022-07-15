@@ -47,7 +47,7 @@ export default function SCompDiario() {
     <View style={styles.container}>
       {loading
         ?
-        <Loading />
+        <Loading color="#0A3B7E"/>
         :
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <DataTable>
@@ -86,7 +86,9 @@ export default function SCompDiario() {
                   <DataTable.Cell style={styles.colpequena}>{((tot.TotRep) * 100).toFixed(2)}%</DataTable.Cell>
                 </DataTable.Row>
               ))}
-              {serResumoDia.map((fat, index) => (
+              {serResumoDia
+              .sort((a, b) => parseInt(a.TotServicos) < parseInt(b.TotServicos) ? 1 : -1)
+              .map((fat, index) => (
                 <DataTable.Row key={index}>
                   <DataTable.Cell style={styles.colmedia}>{fat.Supervisor}</DataTable.Cell>
                   <DataTable.Cell style={styles.colpequena}>{<MoneyPTBR number={((fat.GEDia) * 1)} />}</DataTable.Cell>

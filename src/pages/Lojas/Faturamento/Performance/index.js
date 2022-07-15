@@ -50,7 +50,7 @@ export default function Performance() {
 
       {loading
         ?
-        <Loading />
+        <Loading color="#0A3B7E"/>
         :
         <ScrollView>
           <DataTable.Row style={styles.titleTable}>
@@ -93,7 +93,7 @@ export default function Performance() {
           </ScrollView>
 
           <DataTable.Row style={styles.titleTable}>
-            <DataTable.Cell style={styles.titleText}><Text style={styles.titleText}>Performance do Dia {'diavenda'}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.titleText}><Text style={styles.titleText}>Performance do Dia {fatuTotLojas[0]?.DiaAtual}</Text></DataTable.Cell>
           </DataTable.Row>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <DataTable style={{ marginBottom: 20 }}>
