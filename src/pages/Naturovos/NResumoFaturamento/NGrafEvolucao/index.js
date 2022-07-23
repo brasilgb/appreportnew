@@ -8,7 +8,7 @@ import MoneyPTBR from '../../../../components/MoneyPTBR';
 import Loading from '../../../../components/Loading';
 import api from '../../../../services/api';
 
-export default function GrafEvolucao() {
+export default function NGrafEvolucao() {
 
   const { dtFormatada, dataFiltro } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);

@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import api from '../../../../services/api';
 import Loading from '../../../../components/Loading';
 
-export default function PerformanceMes() {
+export default function NPerformanceMes() {
 
   const { dtFormatada, dataFiltro } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)

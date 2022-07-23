@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { DataTable } from 'react-native-paper';
 import Loading from '../../../../components/Loading';
@@ -8,7 +8,7 @@ import { AuthContext } from '../../../../contexts/auth';
 import api from '../../../../services/api';
 
 export default function Filial() {
-
+ 
     const { dtFormatada, dataFiltro } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [totais, setTotais] = useState([]);

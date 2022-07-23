@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { DataTable } from 'react-native-paper';
-import moment from 'moment';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
 import { AuthContext } from '../../../../contexts/auth';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -11,7 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Loading from '../../../../components/Loading';
 import api from '../../../../services/api';
 
-export default function ResumoDiario() {
+export default function NResumo() {
     const { width, height } = Dimensions.get('screen');
     const modalizeRef = useRef(null);
 

@@ -7,13 +7,13 @@ import { AuthContext } from '../../../../contexts/auth';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/Ionicons';
-import ResAssoc from '../../ResumoFaturamento/ResFaturamento/ResAssoc';
+import ResAssoc from '../../NResumoFaturamento/NResFaturamento/ResAssoc';
 import MoneySemSimbolo from '../../../../components/MoneyPTBR/MoneySemSimbolo';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
 import api from '../../../../services/api';
 import Loading from '../../../../components/Loading';
 
-export default function ResFaturamento() {
+export default function NResFaturamento() {
     const { width, height } = Dimensions.get('screen');
     const modalizeRef = useRef(null);
 

@@ -9,9 +9,19 @@ import GEDia from './GE';
 import PPDia from './PP';
 import api from '../../../../services/api';
 import Loading from '../../../../components/Loading';
-export default function SPerformanceDia() {
 
-  // const { serTotais, serGrafico } = useContext(AuthContext);
+import {
+  VictoryChart,
+  VictoryTheme,
+  VictoryBar,
+  VictoryLine,
+  VictoryAxis,
+  VictoryLabel,
+  VictoryLegend
+} from "victory-native";
+import SVG, { G } from 'react-native-svg';
+
+export default function SPerformanceDia() {
 
   const { dtFormatada, dataFiltro } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)
@@ -48,6 +58,16 @@ export default function SPerformanceDia() {
 
     }, [dataFiltro]);
 
+    const datavendas = serGrafico.map((gr) => {
+      return {
+        x: gr.DiaSemana,
+        y: parseFloat(gr.Vendas ? gr.Vendas : 0),
+      };
+    });
+    
+    const metaUnique = serGrafico.filter((item, pos, self) => self.findIndex(v => v.Meta === item.Meta) === pos).map((m) => m.Meta);
+    const maxval = (((Math.ceil(metaUnique,-1)).toString().substring(0,2) * 1000) + 1000);
+    console.log(maxval)
   return (
     <View style={styles.container}>
       {loading
@@ -70,7 +90,81 @@ export default function SPerformanceDia() {
             <View>
               <PPDia data={serTotais} />
             </View>
-            {/* Gráfico {serGrafico} */}
+            <VictoryChart
+            height={550}
+            // width={350}
+            horizontal
+            responsive={false}
+            animate={{
+              duration: 500,
+              onLoad: { duration: 200 }
+            }}
+            domainPadding={{ x: [5, 15], y: 60 }}
+            theme={VictoryTheme.material}
+          >
+            <VictoryLegend
+              x={0}
+              y={0}
+              title=""
+              centerTitle
+              orientation="horizontal"
+              gutter={20}
+              style={{ title: { fontSize: 10 } }}
+              data={[
+                { name: "Vendas", symbol: { fill: "#025AA6", type: "square" } },
+                { name: "Meta", symbol: { fill: "#FF0000", type: "minus" } }
+              ]}
+            />
+            <VictoryAxis
+              style={{
+                axis: { stroke: "gray" },
+                axisLabel: { fontSize: 10, padding: 0 },
+                grid: { stroke: "none" },
+                ticks: { stroke: "black", size: 2 },
+                tickLabels: { fontSize: 10, padding: 5, angle: -45 }
+              }}
+            />
+            <VictoryAxis
+              dependentAxis
+              orientation="top"
+              style={{
+                width: '100%'
+              }}
+            />
+
+            <VictoryBar
+              data={datavendas}
+              labels={({ datum }) => `R$ ${datum.y}`}
+              // labelComponent={
+              //   <VictoryLabel
+              //     angle={0}
+              //     textAnchor="start"
+              //     verticalAnchor="middle"
+              //     style={{ fontSize: 10 }}
+              //   />
+              // }
+              barRatio={1}
+              cornerRadius={6}
+              alignment="middle"
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 1000 }
+              }}
+              style={{
+                data: {
+                  fill: "#025AA6",
+                  stroke: '#025AA6'
+                  // width: 20,
+                }
+              }}
+            />
+            <VictoryLine
+              style={{ data: { stroke: "#FF0000", strokeWidth: 2 } }}
+              y={() => metaUnique ? metaUnique : 0}
+            />
+
+          </VictoryChart>
+
           </ScrollView>
         </Fragment>
       }

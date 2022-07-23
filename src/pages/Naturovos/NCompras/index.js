@@ -1,19 +1,18 @@
+import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import HeaderPage from '../../../components/Header/Page';
 import { AuthContext } from '../../../contexts/auth';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import moment from 'moment';
 import api from '../../../services/api';
+import { BoxHome, TabContainer } from '../../style';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import NPerformance from './NPerformance';
+import NCompDiario from './NCompDiario';
+import NPerfMes from './NPerfMes';
+import NPerfAssociacao from './NPerfAssociacao';
 const CompraTab = createMaterialTopTabNavigator();
 
-import CCompDiario from './CompDiario';
-import CPerformance from './Performance';
-import CPerformanceAss from './PerformanceAss';
-import CPerformanceMes from './PerformanceMes';
-import { BoxHome, TabContainer } from '../../style';
-
 export default function NCompras() {
-
+ 
   const { dtFormatada, dataFiltro } = useContext(AuthContext);
   const [nComTotal, setNComTotal] = useState([]);
 
@@ -45,17 +44,17 @@ export default function NCompras() {
       <TabContainer>
         <CompraTab.Navigator
           screenOptions={{
-            tabBarLabelStyle: { fontSize: 12 },
+            tabBarLabelStyle: { fontSize: 14 },
             // tabBarItemStyle: { width: 125 },
-            tabBarStyle: { backgroundColor: '#fdfdfd' },
-            tabBarIndicatorStyle: {backgroundColor: '#0A3B7E'},
-            tabBarPressColor: '#014D9B'
+            tabBarStyle: { backgroundColor: '#f1f1f1' },
+            tabBarIndicatorStyle: { backgroundColor: '#F5AB00' },
+            tabBarPressColor: '#fcbc32'
           }}
         >
-          <CompraTab.Screen name="Compar. Diário" component={CCompDiario} />
-          <CompraTab.Screen name="Perform." component={CPerformance} />
-          <CompraTab.Screen name="Perform. Mês" component={CPerformanceMes} />
-          <CompraTab.Screen name="Perform. Tipo." component={CPerformanceAss} />
+          <CompraTab.Screen name="Compar. Diário" component={NCompDiario} />
+          <CompraTab.Screen name="Perform." component={NPerformance} />
+          <CompraTab.Screen name="Perform. Mês" component={NPerfMes} />
+          <CompraTab.Screen name="Perform. Tipo." component={NPerfAssociacao} />
         </CompraTab.Navigator>
       </TabContainer>
     </BoxHome>

@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { DataTable } from 'react-native-paper';
-import moment from 'moment';
-import MoneyPTBR from '../../../../components/MoneyPTBR';
-import { AuthContext } from '../../../../contexts/auth';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
-import ResGrupo from './ResGrupo';
+import { DataTable } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-import api from '../../../../services/api';
 import Loading from '../../../../components/Loading';
+import MoneyPTBR from '../../../../components/MoneyPTBR';
+import { AuthContext } from '../../../../contexts/auth';
+import api from '../../../../services/api';
+import ResGrupo from './ResGrupo';
 
-export default function PerformanceAssociacao() {
+export default function NPerfAssociacao() {
     const { width, height } = Dimensions.get('screen');
     const modalizeRef = useRef(null);
 
@@ -26,11 +25,11 @@ export default function PerformanceAssociacao() {
     const openGrupo = () => {
         modalizeRef.current?.open();
     };
- 
+
     const nameSetor = (setor) => {
         setSetorName(setor);
     };
-    
+
     useEffect(() => {
         async function getNfatuPerfSetor() {
             setLoading(true);

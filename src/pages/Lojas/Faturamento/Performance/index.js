@@ -5,8 +5,18 @@ import Loading from '../../../../components/Loading';
 import { DataTable } from 'react-native-paper';
 import { AuthContext } from '../../../../contexts/auth';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
-import { useFocusEffect } from '@react-navigation/native';
 import api from '../../../../services/api';
+
+import {
+  VictoryChart,
+  VictoryTheme,
+  VictoryBar,
+  VictoryLine,
+  VictoryAxis,
+  VictoryLabel,
+  VictoryLegend
+} from "victory-native";
+import { Svg, G } from 'react-native-svg'; 'react-native-svg';
 
 export default function Performance() {
 
@@ -29,7 +39,7 @@ export default function Performance() {
         })
     }
     getFatuGrafLojas();
- 
+
     async function getFatuTotLojas() {
       setLoading(true);
       await api.get(`fatutotlojas/${dtFormatada(dataFiltro)}`)
@@ -45,12 +55,21 @@ export default function Performance() {
 
   }, [dataFiltro]);
 
+  const datavendas = fatuGrafLojas.map((gr) => {
+    return {
+      x: gr.DiaSemana,
+      y: parseFloat(gr.Vendas ? gr.Vendas : 0),
+      z: (gr.Margem ? parseFloat(gr.Margem) * 400000 : 0)
+    };
+  });
+  
+  const metaUnique = fatuGrafLojas.filter((item, pos, self) => self.findIndex(v => v.Meta === item.Meta) === pos).map((m) => m.Meta);
+
   return (
     <View style={styles.container}>
-
       {loading
         ?
-        <Loading color="#0A3B7E"/>
+        <Loading color="#0A3B7E" />
         :
         <ScrollView>
           <DataTable.Row style={styles.titleTable}>
@@ -139,7 +158,107 @@ export default function Performance() {
             </DataTable>
           </ScrollView>
 
-          {/* Gráfico {fatuGrafLojas}*/}
+          <VictoryChart
+            height={550}
+            // width={350}
+            horizontal
+            responsive={false}
+            animate={{
+              duration: 500,
+              onLoad: { duration: 200 }
+            }}
+            domainPadding={{ x: [5, 15], y: 60 }}
+            theme={VictoryTheme.material}
+          >
+            <VictoryLegend
+              x={0}
+              y={0}
+              title=""
+              centerTitle
+              orientation="horizontal"
+              gutter={20}
+              style={{ title: { fontSize: 10 } }}
+              data={[
+                { name: "Vendas", symbol: { fill: "#025AA6", type: "square" } },
+                { name: "Meta", symbol: { fill: "#FF0000", type: "minus" } },
+                { name: "Margem", symbol: { fill: "#F5AB00", type: "minus" } }
+              ]}
+            />
+            <VictoryAxis
+              style={{
+                axis: { stroke: "gray" },
+                axisLabel: { fontSize: 10, padding: 0 },
+                grid: { stroke: "none" },
+                ticks: { stroke: "black", size: 2 },
+                tickLabels: { fontSize: 10, padding: 5, angle: -45 }
+              }}
+            />
+            <VictoryAxis
+              dependentAxis
+              orientation="top"
+              style={{
+                width: '100%'
+              }}
+            />
+
+            <VictoryBar
+              data={datavendas}
+              labels={({ datum }) => `R$ ${datum.y}`}
+              // labelComponent={
+              //   <VictoryLabel
+              //     // angle={0}
+              //     textAnchor="start"
+              //     verticalAnchor="middle"
+              //     // style={{ fontSize: 10 }}
+              //   />
+              // }
+              barRatio={1}
+              cornerRadius={6}
+              alignment="middle"
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 1000 }
+              }}
+              style={{
+                data: {
+                  fill: "#025AA6",
+                  stroke: '#025AA6'
+                  // width: 20,
+                }
+              }}
+            />
+            <VictoryLine
+              style={{ data: { stroke: "#FF0000", strokeWidth: 2 } }}
+              y={() => metaUnique ? metaUnique : 0}
+            />
+            <VictoryLine
+              style={{ data: { stroke: "#F5AB00", strokeWidth: 2 } }}
+              data={datavendas}
+              y="z"
+            />
+
+          </VictoryChart>
+
+          <Svg style={{ height: 400, width: '100%', left: 0, top: 487, position: 'absolute' }}>
+            <G transform={"translate(0, 40)"}>
+              <VictoryAxis
+                // width={690}
+                standalone={false}
+                theme={VictoryTheme.material}
+                orientation="bottom"
+                domain={[0,120]}
+                // tickValues={[0, 20, 40, 60, 80, 100, 120]}
+                tickFormat={(t) => `${Math.round(t)}%`}
+                style={{
+                  axis: { stroke: "#F5AB00" },
+                  axisLabel: { fontSize: 10 },
+                  grid: { stroke: "none" },
+                  ticks: { stroke: "gray", size: 5 },
+                  tickLabels: { fontSize: 12 }
+                }}
+              />
+            </G>
+          </Svg>
 
         </ScrollView>
 

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import Loading from '../../../../components/Loading';
 import MoneyPTBR from '../../../../components/MoneyPTBR';
 import { AuthContext } from '../../../../contexts/auth';
 import api from '../../../../services/api';
 
-export default function Associacao() {
+export default function Grupo() {
 
     const { dtFormatada, dataFiltro } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);

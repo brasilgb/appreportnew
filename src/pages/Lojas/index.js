@@ -35,7 +35,7 @@ export default function Lojas() {
   const colorValid = ((value) => {
     if (value <= 90) return "#DC2626";
     if (value <= 98) return "#F18800";
-    if (value > 90) return "#10B981";
+    if (value > 98) return "#10B981";
   });
 
   return (
@@ -62,24 +62,24 @@ export default function Lojas() {
                 <ContainerText.Value color="#0e98e5"> <MoneyPTBR number={totais[0]?.Meta ? totais[0]?.Meta : 0} /> </ContainerText.Value>
               </ContainerText>
               <ContainerText>
-                <ContainerText.Title color={colorValid(totais[0]?.MetaAlcancada)}>Faturamento</ContainerText.Title>
-                <ContainerText.Value color={colorValid(totais[0]?.MetaAlcancada)}> <MoneyPTBR number={parseFloat(totais[0]?.Faturamento ? totais[0]?.Faturamento : 0)} /> </ContainerText.Value>
+                <ContainerText.Title color={colorValid(totais[0]?.MetaAlcancada * 100)}>Faturamento</ContainerText.Title>
+                <ContainerText.Value color={colorValid(totais[0]?.MetaAlcancada * 100)}> <MoneyPTBR number={parseFloat(totais[0]?.Faturamento ? totais[0]?.Faturamento : 0)} /> </ContainerText.Value>
               </ContainerText>
             </AreaUm>
  
-            <AreaUm height="120px" paddingTop="45px">
+            <AreaUm height="120px" paddingTop="20%">
               <CircularProgress
                 value={totais[0]?.MetaAlcancada ? (totais[0]?.MetaAlcancada) * 100 : 0}
-                radius={65}
+                radius={75}
                 duration={2000}
                 inActiveStrokeOpacity={0.4}
-                progressValueColor={colorValid(totais[0]?.MetaAlcancada)}
-                activeStrokeColor={colorValid(totais[0]?.MetaAlcancada)}
+                progressValueColor={colorValid(totais[0]?.MetaAlcancada * 100)}
+                activeStrokeColor={colorValid(totais[0]?.MetaAlcancada * 100)}
                 activeStrokeWidth={10}
                 inActiveStrokeWidth={10}
                 maxValue={100}
                 title={'Meta'}
-                titleColor={colorValid(totais[0]?.MetaAlcancada)}
+                titleColor={colorValid(totais[0]?.MetaAlcancada * 100)}
                 titleFontSize={12}
                 progressValueFontSize={30}
                 titleStyle={{ fontWeight: 'bold' }}
@@ -88,20 +88,20 @@ export default function Lojas() {
               />
 
             </AreaUm>
-            <AreaUm paddingTop="55px">
+            <AreaUm paddingTop="30%">
 
               <CircularProgress
                 value={totais[0]?.Margem ? (totais[0]?.Margem) * 100 : 0}
-                radius={65}
+                radius={75}
                 duration={2000}
                 inActiveStrokeOpacity={0.4}
-                progressValueColor={colorValid(totais[0]?.Margem)}
-                activeStrokeColor={colorValid(totais[0]?.Margem)}
+                progressValueColor={colorValid(totais[0]?.Margem * 100)}
+                activeStrokeColor={colorValid(totais[0]?.Margem * 100)}
                 activeStrokeWidth={10}
                 inActiveStrokeWidth={10}
                 maxValue={100}
                 title={'Margem'}
-                titleColor={colorValid(totais[0]?.Margem)}
+                titleColor={colorValid(totais[0]?.Margem * 100)}
                 titleFontSize={12}
                 progressValueFontSize={30}
                 titleStyle={{ fontWeight: 'bold' }}
@@ -111,16 +111,16 @@ export default function Lojas() {
 
               <CircularProgress
                 value={totais[0]?.Projecao ? (totais[0]?.Projecao) * 100 : 0}
-                radius={65}
+                radius={75}
                 duration={2000}
                 inActiveStrokeOpacity={0.4}
-                progressValueColor={colorValid(totais[0]?.Projecao)}
-                activeStrokeColor={colorValid(totais[0]?.Projecao)}
+                progressValueColor={colorValid(totais[0]?.Projecao * 100)}
+                activeStrokeColor={colorValid(totais[0]?.Projecao * 100)}
                 activeStrokeWidth={10}
                 inActiveStrokeWidth={10}
                 maxValue={100}
                 title={'Projeção'}
-                titleColor={colorValid(totais[0]?.Projecao)}
+                titleColor={colorValid(totais[0]?.Projecao * 100)}
                 titleFontSize={12}
                 progressValueFontSize={30}
                 titleStyle={{ fontWeight: 'bold' }}

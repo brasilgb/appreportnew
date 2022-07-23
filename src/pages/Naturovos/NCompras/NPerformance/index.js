@@ -1,9 +1,12 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+
+import { DataTable } from 'react-native-paper';
 import { AuthContext } from '../../../../contexts/auth';
-import api from '../../../../services/api';
+import MoneyPTBR from '../../../../components/MoneyPTBR';
 import Loading from '../../../../components/Loading';
+import api from '../../../../services/api';
 
 import {
   VictoryChart,
@@ -15,29 +18,44 @@ import {
   VictoryLegend
 } from "victory-native";
 
-export default function CPerformance() {
+export default function NPerformance() {
 
   const { dtFormatada, dataFiltro } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)
-  const [comGrafico, setComGrafico] = useState([]);
+  const [ncomTotais, setNcomTotais] = useState([]);
+  const [ncomGrafico, setNComGrafico] = useState([]);
 
-  // Extração de dados resumos totais
   useEffect(() => {
-    async function getComGrafico() {
+    async function getNComGrafico() {
       setLoading(true);
-      await api.get(`comgrafico/${dtFormatada(dataFiltro)}`)
-        .then(comgrafico => {
-          setComGrafico(comgrafico.data);
+      await api.get(`ncomgrafico/${dtFormatada(dataFiltro)}`)
+        .then(ncomgrafico => {
+          setNComGrafico(ncomgrafico.data);
           setLoading(false);
         })
         .catch(err => {
           console.log(err);
         })
     }
-    getComGrafico();
+    getNComGrafico();
+
+    async function getNcomTotais() {
+      setLoading(true);
+      await api.get(`ncomtotal/${dtFormatada(dataFiltro)}`)
+        .then(ncomtotal => {
+          setNcomTotais(ncomtotal.data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+    getNcomTotais();
+
   }, [dataFiltro]);
 
-  const datacompras = comGrafico.map((gr) => {
+
+  const datacompra = ncomGrafico.map((gr) => {
     return {
       x: gr.DiaSemana,
       y: parseFloat(gr.Compras ? gr.Compras : 0)
@@ -51,6 +69,7 @@ export default function CPerformance() {
         <Loading />
         :
         <ScrollView>
+
           <VictoryChart
             height={550}
             // width={350}
@@ -93,14 +112,14 @@ export default function CPerformance() {
             />
 
             <VictoryBar
-              data={datacompras}
+              data={datacompra}
               labels={({ datum }) => `R$ ${datum.y}`}
               // labelComponent={
               //   <VictoryLabel
-              //     angle={0}
+              //     // angle={0}
               //     textAnchor="start"
               //     verticalAnchor="middle"
-              //     style={{ fontSize: 10 }}
+              //     // style={{ fontSize: 10 }}
               //   />
               // }
               barRatio={1}
@@ -123,8 +142,8 @@ export default function CPerformance() {
         </ScrollView>
       }
 
-
     </View>
+
   );
 }
 
@@ -153,6 +172,7 @@ const styles = StyleSheet.create({
   },
   titleTable: {
     backgroundColor: "#29ABE2",
+    color: "#FFF",
     borderTopLeftRadius: 6,
     borderTopRightRadius: 6
   },

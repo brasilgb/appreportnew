@@ -7,7 +7,7 @@ import MoneyPTBR from '../../../../components/MoneyPTBR';
 import Loading from '../../../../components/Loading';
 import api from '../../../../services/api';
 
-export default function CPerformanceAss() {
+export default function NPerfAssociacao() {
 
   const { dtFormatada, dataFiltro } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)

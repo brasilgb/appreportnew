@@ -6,8 +6,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 const ResumoTab = createMaterialTopTabNavigator();
 
 import { AuthContext } from '../../../contexts/auth';
-import ResFaturamento from './ResFaturamento';
-import GrafEvolucao from './GrafEvolucao';
+import NResFaturamento from './NResFaturamento';
+import NGrafEvolucao from './NGrafEvolucao';
 import api from '../../../services/api';
 
 export default function NResumoFaturamento() {
@@ -49,8 +49,8 @@ export default function NResumoFaturamento() {
                         tabBarPressColor: '#fcbc32'
                     }}
                 >
-                    <ResumoTab.Screen name="Resumo Faturamento" component={ResFaturamento} />
-                    <ResumoTab.Screen name="Gráfico Evolução" component={GrafEvolucao} />
+                    <ResumoTab.Screen name="Resumo Faturamento" component={NResFaturamento} />
+                    <ResumoTab.Screen name="Gráfico Evolução" component={NGrafEvolucao} />
                 </ResumoTab.Navigator>
             </TabContainer>
         </BoxHome>

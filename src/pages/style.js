@@ -25,7 +25,7 @@ padding-top: 2px;
 `;
 export const AreaUm = styled.View`
 flex-direction: row;
-align-items: flex-start;
+align-items: center;
 justify-content: space-around;
 height: ${(props) => props.height ? props.height : '0px'};
 padding-top: ${(props) => props.paddingTop ? props.paddingTop : '10px'};

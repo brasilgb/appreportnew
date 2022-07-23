@@ -15,9 +15,9 @@ import LCompras from '../pages/Lojas/Compras';
 // Roteamento Naturovos
 import Naturovos from '../pages/Naturovos';
 import NResumo from '../pages/Naturovos/NResumo';
-import NFaturamento from '../pages/Naturovos/Faturamento';
-import NCompras from '../pages/Naturovos/Compras';
-import NResumoFaturamento from '../pages/Naturovos/ResumoFaturamento';
+import NFaturamento from '../pages/Naturovos/NFaturamento';
+import NCompras from '../pages/Naturovos/NCompras';
+import NResumoFaturamento from '../pages/Naturovos/NResumoFaturamento';
 
 // Roteamento Supermercados
 import Super from '../pages/Supermercados';
@@ -25,7 +25,6 @@ import ResumoSuper from '../pages/Supermercados/ResumoSuper';
 import SCompras from '../pages/Supermercados/Compras';
 import SFaturamento from '../pages/Supermercados/Faturamento';
 import { AuthContext } from '../contexts/auth';
-
 
 export default function AppRoutes() {
   const { user } = useContext(AuthContext);
@@ -93,11 +92,6 @@ export default function AppRoutes() {
       </SuperStack.Navigator>
     )
   }
-  const forFade = ({ current, closing }) => ({
-    cardStyle: {
-      opacity: current.progress,
-    },
-  });
 
   return (
     <AppStack.Navigator

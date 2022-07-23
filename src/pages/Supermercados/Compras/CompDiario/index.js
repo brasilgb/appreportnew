@@ -8,7 +8,7 @@ import moment from 'moment';
 import api from '../../../../services/api';
 import Loading from '../../../../components/Loading';
 
-export default function SCompDiario() {
+export default function CCompDiario() {
 
   const { dtFormatada, dataFiltro } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)

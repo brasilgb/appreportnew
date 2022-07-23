@@ -1,47 +1,45 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { DataTable } from 'react-native-paper';
+import MoneyPTBR from '../../../../components/MoneyPTBR';
 import { AuthContext } from '../../../../contexts/auth';
 import { ScrollView } from 'react-native-gesture-handler';
-import MoneyPTBR from '../../../../components/MoneyPTBR';
-import Loading from '../../../../components/Loading';
 import api from '../../../../services/api';
+import Loading from '../../../../components/Loading';
 
-export default function CPerformanceMes() {
-  // const { nComPerfMes, nComTotal } = useContext(AuthContext);
+export default function NPerfMes() {
 
   const { dtFormatada, dataFiltro } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)
-  const [nComPerfMes, setNComPerfMes] = useState([]);
-  const [nComTotal, setNComTotal] = useState([]);
+  const [ncomPerfMes, setNcomPerfMes] = useState([]);
+  const [ncomTotais, setNcomTotais] = useState([]);
 
-  // Extração de dados resumos Faturamento e gráfico de evolução
   useEffect(() => {
-    async function getNComPerfMes() {
+    async function getNcomPerfMes() {
       setLoading(true);
       await api.get(`ncomperfmes/${dtFormatada(dataFiltro)}`)
         .then(ncomperfmes => {
-          setNComPerfMes(ncomperfmes.data);
+          setNcomPerfMes(ncomperfmes.data);
           setLoading(false);
         })
         .catch(err => {
           console.log(err);
         })
     }
-    getNComPerfMes();
+    getNcomPerfMes();
 
-    async function getNComTotal() {
+    async function getNcomTotais() {
       setLoading(true);
       await api.get(`ncomtotal/${dtFormatada(dataFiltro)}`)
         .then(ncomtotal => {
-          setNComTotal(ncomtotal.data);
+          setNcomTotais(ncomtotal.data);
           setLoading(false);
         })
         .catch(err => {
           console.log(err);
         })
     }
-    getNComTotal();
+    getNcomTotais();
 
   }, [dataFiltro]);
 
@@ -54,33 +52,34 @@ export default function CPerformanceMes() {
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <DataTable>
             <DataTable.Header style={{ backgroundColor: '#eee' }}>
-              <DataTable.Title style={styles.colmedia}>Mês/Ano.</DataTable.Title>
-              <DataTable.Title style={styles.colmedia}>Média Compras</DataTable.Title>
+              <DataTable.Title style={styles.colpequena}>Mês/Ano</DataTable.Title>
+              <DataTable.Title style={styles.colgrande}>Média Compras</DataTable.Title>
               <DataTable.Title style={styles.colpequena}>Rep. Total</DataTable.Title>
             </DataTable.Header>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-              {nComTotal.map((tot, index) => (
+              {ncomTotais.map((tot, index) => (
                 <DataTable.Row key={index} style={{ backgroundColor: '#f1f1f1' }}>
-                  <DataTable.Cell style={styles.colmedia}>Média</DataTable.Cell>
-                  <DataTable.Cell style={styles.colmedia}>{<MoneyPTBR number={((tot.MesMedia) * 1)} />}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>TOTAL</DataTable.Cell>
+                  <DataTable.Cell style={styles.colgrande}><MoneyPTBR number={((tot.MesMedia) * 1)} /></DataTable.Cell>
                   <DataTable.Cell style={styles.colpequena}>{((tot.MesRepTotal) * 100).toFixed(2)}%</DataTable.Cell>
                 </DataTable.Row>
               ))}
-              {nComPerfMes.map((fat, index) => (
+              {ncomPerfMes.map((mes, index) => (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell style={styles.colmedia}>{fat.MesAno}</DataTable.Cell>
-                  <DataTable.Cell style={styles.colmedia}>
+                  <DataTable.Cell style={styles.colpequena}>{mes.MesAno}</DataTable.Cell>
+                  <DataTable.Cell style={styles.colgrande}>
                     <Text
-                      style={((fat.Media) * 1) > ((fat.ColorMedia) * 1) ? { color: 'green' } : { color: 'red' }}
+                      style={((mes.Media) * 1) > mes.ColorMedia ? { color: 'green' } : { color: 'red' }}
                     >
-                      {<MoneyPTBR number={((fat.Media) * 1)} />}
+                      {<MoneyPTBR number={((mes.Media) * 1)} />}
                     </Text>
                   </DataTable.Cell>
-                  <DataTable.Cell style={styles.colpequena}>{((fat.RepTotal) * 100).toFixed(2)}%</DataTable.Cell>
+                  <DataTable.Cell style={styles.colpequena}>{((mes.RepTotal) * 100).toFixed(2)}%</DataTable.Cell>
                 </DataTable.Row>
               ))}
             </ScrollView>
+
           </DataTable>
         </ScrollView>
       }
@@ -95,7 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF"
   },
   colgrande: {
-    width: 180,
+    width: 200,
     paddingHorizontal: 2
   },
   colmedia: {
@@ -103,18 +102,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2
   },
   colpequena: {
-    width: 80,
+    width: 100,
     paddingHorizontal: 2
   },
   colmin: {
     width: 50,
     paddingHorizontal: 2
-  },
-  titleTable: {
-    backgroundColor: "#29ABE2",
-    borderRadius: 6
-  },
-  titleText: {
-    color: "#FFF"
   }
 });

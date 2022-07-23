@@ -1,9 +1,12 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+
+import { DataTable } from 'react-native-paper';
 import { AuthContext } from '../../../../contexts/auth';
-import api from '../../../../services/api';
+import MoneyPTBR from '../../../../components/MoneyPTBR';
 import Loading from '../../../../components/Loading';
+import api from '../../../../services/api';
 
 import {
   VictoryChart,
@@ -14,33 +17,50 @@ import {
   VictoryLabel,
   VictoryLegend
 } from "victory-native";
+import { Svg, G } from 'react-native-svg'; 'react-native-svg';
 
-export default function CPerformance() {
+export default function NPerformance() {
 
   const { dtFormatada, dataFiltro } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)
-  const [comGrafico, setComGrafico] = useState([]);
+  const [nfatuTotais, setNfatuTotais] = useState([]);
+  const [nfatuGrafico, setNfatuGrafico] = useState([]);
 
-  // Extração de dados resumos totais
   useEffect(() => {
-    async function getComGrafico() {
+    async function getNfatuGrafico() {
       setLoading(true);
-      await api.get(`comgrafico/${dtFormatada(dataFiltro)}`)
-        .then(comgrafico => {
-          setComGrafico(comgrafico.data);
+      await api.get(`nfatugrafico/${dtFormatada(dataFiltro)}`)
+        .then(nfatugrafico => {
+          setNfatuGrafico(nfatugrafico.data);
           setLoading(false);
         })
         .catch(err => {
           console.log(err);
         })
     }
-    getComGrafico();
+    getNfatuGrafico();
+
+    async function getNfatuTotais() {
+      setLoading(true);
+      await api.get(`nfatutotais/${dtFormatada(dataFiltro)}`)
+        .then(nfatutotais => {
+          setNfatuTotais(nfatutotais.data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+    getNfatuTotais();
+
   }, [dataFiltro]);
 
-  const datacompras = comGrafico.map((gr) => {
+
+  const datavendas = nfatuGrafico.map((gr) => {
     return {
       x: gr.DiaSemana,
-      y: parseFloat(gr.Compras ? gr.Compras : 0)
+      y: parseFloat(gr.Vendas ? gr.Vendas : 0),
+      z: (gr.Margem ? parseFloat(gr.Margem) * 2000000 : 0)
     };
   });
 
@@ -51,6 +71,18 @@ export default function CPerformance() {
         <Loading />
         :
         <ScrollView>
+          <DataTable style={{ marginBottom: 10 }}>
+            <DataTable.Header style={styles.titleTable}>
+              <DataTable.Title><Text style={styles.titleText}>Média</Text></DataTable.Title>
+            </DataTable.Header>
+            {nfatuTotais.map((fatmes, index) => (
+              <DataTable.Row key={index}>
+                <DataTable.Cell>{<MoneyPTBR number={((fatmes.MediaDia) * 1)} />}</DataTable.Cell>
+              </DataTable.Row>
+            ))}
+          </DataTable>
+
+          
           <VictoryChart
             height={550}
             // width={350}
@@ -72,7 +104,8 @@ export default function CPerformance() {
               gutter={20}
               style={{ title: { fontSize: 10 } }}
               data={[
-                { name: "Compras", symbol: { fill: "#025AA6", type: "square" } }
+                { name: "Vendas", symbol: { fill: "#025AA6", type: "square" } },
+                { name: "Margem", symbol: { fill: "#F5AB00", type: "minus" } }
               ]}
             />
             <VictoryAxis
@@ -93,14 +126,14 @@ export default function CPerformance() {
             />
 
             <VictoryBar
-              data={datacompras}
+              data={datavendas}
               labels={({ datum }) => `R$ ${datum.y}`}
               // labelComponent={
               //   <VictoryLabel
-              //     angle={0}
+              //     // angle={0}
               //     textAnchor="start"
               //     verticalAnchor="middle"
-              //     style={{ fontSize: 10 }}
+              //     // style={{ fontSize: 10 }}
               //   />
               // }
               barRatio={1}
@@ -119,12 +152,41 @@ export default function CPerformance() {
               }}
             />
 
+            <VictoryLine
+              style={{ data: { stroke: "#F5AB00", strokeWidth: 2 } }}
+              data={datavendas}
+              y="z"
+            />
+
           </VictoryChart>
+
+          <Svg style={{ height: 400, width: '100%', left: 0, top: 275, position: 'absolute' }}>
+            <G transform={"translate(0, 40)"}>
+              <VictoryAxis
+                // width={690}
+                standalone={false}
+                theme={VictoryTheme.material}
+                orientation="bottom"
+                // domain={[0,120]}
+                tickValues={[0, 50, 100]}
+                tickFormat={(t) => `${Math.round(t)}%`}
+                style={{
+                  axis: { stroke: "#F5AB00" },
+                  axisLabel: { fontSize: 10 },
+                  grid: { stroke: "none" },
+                  ticks: { stroke: "gray", size: 5 },
+                  tickLabels: { fontSize: 12 }
+                }}
+              />
+            </G>
+          </Svg>
+
+
         </ScrollView>
       }
 
-
     </View>
+
   );
 }
 
@@ -153,6 +215,7 @@ const styles = StyleSheet.create({
   },
   titleTable: {
     backgroundColor: "#29ABE2",
+    color: "#FFF",
     borderTopLeftRadius: 6,
     borderTopRightRadius: 6
   },

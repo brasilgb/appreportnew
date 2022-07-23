@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2
   },
   colmedia: {
-    width: 120,
+    width: 130,
     paddingHorizontal: 2
   },
   colpequena: {
